@@ -1,14 +1,17 @@
-﻿using LMS.Common.Models.AccountModels;
+﻿using LMS.Common.Constants;
+using LMS.Common.Models.AccountModels;
 using LMS.Service.Api;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LMS.Api.Controllers.Admin
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdminsController(AdminService adminService) : ControllerBase
+    public class AdminsController(AdminService adminService, CourseService courseService) : ControllerBase
     {
         private readonly AdminService _adminService = adminService;
+        private readonly CourseService _courseService = courseService;
 
         [HttpPost("action/login")]
         public async Task<IActionResult> Login(AdminLoginModel adminLoginModel)
@@ -18,7 +21,7 @@ namespace LMS.Api.Controllers.Admin
         }
 
         [HttpGet("action/users")]
-        //[Authorize(Roles =Constants.Admin)]
+        [Authorize(Roles =Constants.Admin)]
         public async Task<IActionResult> GetUsers()
         {
             var users = await _adminService.GetAllUsers();
@@ -26,7 +29,7 @@ namespace LMS.Api.Controllers.Admin
         }
 
         [HttpGet("action/courses")]
-        //[Authorize(Roles = Constants.Admin)]
+        [Authorize(Roles = Constants.Admin)]
 
         public async Task<IActionResult> GetCourses()
         {
@@ -35,6 +38,8 @@ namespace LMS.Api.Controllers.Admin
         }
 
         [HttpPut("action/block")]
+        [Authorize(Roles = Constants.Admin)]
+
         public async Task<IActionResult> BlockUser(Guid userId)
         {
             await _adminService.BlockUser(userId);
@@ -43,15 +48,14 @@ namespace LMS.Api.Controllers.Admin
 
 
         [HttpDelete("action/content")]
+        [Authorize(Roles = Constants.Admin)]
         public IActionResult DeleteContent(string fileName)
         {
            bool result = _adminService.DeleteFile(fileName);
             return Ok(result);
         }
 
-        //[HttpDelete]
-        //[Authorize(Roles = Constants.Admin)]
-
+ 
 
     }
 }
