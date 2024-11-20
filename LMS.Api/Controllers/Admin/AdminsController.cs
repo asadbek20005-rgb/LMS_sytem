@@ -12,7 +12,7 @@ namespace LMS.Api.Controllers.Admin
 
         [HttpPost("action/login")]
         public async Task<IActionResult> Login(AdminLoginModel adminLoginModel)
-        {
+        { 
             string token = await _adminService.Login(adminLoginModel);
             return Ok(token);
         }
