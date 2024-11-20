@@ -15,7 +15,7 @@ namespace LMS.Service.Api
         private readonly ContentServce _contentService = contentServce;
         private readonly JwtTokenService _jwtTokenService = jwtTokenService;
         public async Task<string> Login(AdminLoginModel adminLoginModel)
-        {
+        { 
             try
             {
                 var user = await _userRepository.GetUserByUsername(adminLoginModel.Username);
