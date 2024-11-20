@@ -8,10 +8,9 @@ namespace LMS.Api.Controllers.Admin
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdminsController(AdminService adminService, CourseService courseService) : ControllerBase
+    public class AdminsController(AdminService adminService) : ControllerBase
     {
         private readonly AdminService _adminService = adminService;
-        private readonly CourseService _courseService = courseService;
 
         [HttpPost("action/login")]
         public async Task<IActionResult> Login(AdminLoginModel adminLoginModel)
@@ -46,7 +45,7 @@ namespace LMS.Api.Controllers.Admin
             return Ok();
         }
 
-
+            
         [HttpDelete("action/content")]
         [Authorize(Roles = Constants.Admin)]
         public IActionResult DeleteContent(string fileName)
