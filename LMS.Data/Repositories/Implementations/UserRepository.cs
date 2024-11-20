@@ -1,21 +1,18 @@
-﻿using LMS.Data.Context;
+﻿using LMS.Common.Constants;
+using LMS.Data.Context;
 using LMS.Data.Entities;
-using LMS.Data.Exceptions;
+using LMS.Data.Exceptions.User;
 using LMS.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace LMS.Data.Repositories.Implementations
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository(AppDbContext appDbContext) : IUserRepository
     {
-        private readonly AppDbContext _context;
+        private readonly AppDbContext _context = appDbContext;
 
-        public UserRepository(AppDbContext appDbContext)
-        {
-            _context = appDbContext;
-        }
-
-        public async Task CheckUserExist(string userPhoneNumber)
+        public async Task CheckUserPhone(string userPhoneNumber)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.PhoneNumber == userPhoneNumber);
             if (user != null)
@@ -28,7 +25,7 @@ namespace LMS.Data.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
 
-       
+
 
         public async Task<List<User>> GetAllUsers()
         {
@@ -38,26 +35,21 @@ namespace LMS.Data.Repositories.Implementations
 
         public async Task<User> GetUserById(Guid userId)
         {
-            var user = await _context.Users.FindAsync(userId);
-            if (user == null)
-                throw new UserNotFoundException();
+            var user = await _context.Users.FindAsync(userId) ?? throw new UserNotFoundException();
             return user;
         }
 
         public async Task<User> GetUserByPhoneNumber(string phoneNumber)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
-            if (user == null)
-                throw new UserNotFoundException();
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber) ?? throw new UserNotFoundException();
             return user;
         }
 
         public async Task BlockUser(Guid userId)
         {
-            var user = await _context.Users.FindAsync(userId);
-            if (user == null)
-                throw new UserNotFoundException();
+            var user = await _context.Users.FindAsync(userId) ?? throw new UserNotFoundException();
             user.IsBlocked = true;
+            _context.Update(user);
             await _context.SaveChangesAsync();
         }
 
@@ -65,6 +57,68 @@ namespace LMS.Data.Repositories.Implementations
         {
             _context.Users.Update(user);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<User> GetUserByUsername(string username)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == username) ?? throw new UserNotFoundException();
+            return user;
+        }
+
+        public async Task CheckUsername(string username)
+        {
+            var users = _context.Users;
+            if (users is null)
+                throw new UserNotFoundException();
+
+            var haveUsername = await users.AnyAsync(x => x.Username == username);
+            if (haveUsername)
+                throw new SameUserExistException($"User with {username} is already exist");
+        }
+
+        public async Task VerifyUsername(string username)
+        {
+            var users = _context.Users;
+            if (users is null)
+                throw new UserNotFoundException();
+
+            var haveUsername = await users.AnyAsync(x => x.Username == username);
+            if (!haveUsername)
+                throw new UsernameNotVerified();
+        }
+
+        public async Task CheckRoleClient(string role)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Role == role);
+
+            if (user is null)
+                throw new UserNotFoundException();
+
+            if(user.Role != Constants.Client)
+                throw new RoleNotVerifyException("Role must be <<Client>>");
+
+        }
+
+        public async Task CheckRoleOwner(string role)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Role == role);
+
+            if (user is null)
+                throw new UserNotFoundException();
+
+            if (user.Role != Constants.Owner)
+                throw new RoleNotVerifyException("Role must be <<Owner>>");
+        }
+
+        public async Task CheckRoleAdmin(string role)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Role == role);
+
+            if (user is null)
+                throw new UserNotFoundException();
+
+            if (user.Role != Constants.Client)
+                throw new RoleNotVerifyException("Role must be <<Admin>>");
         }
     }
 }

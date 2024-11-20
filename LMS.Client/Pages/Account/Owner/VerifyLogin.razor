@@ -1,0 +1,16 @@
+﻿@page "/pages/account/owner/verify-login/{code}"
+@inherits RazorPageCodeSource.Owner.VerifyLoginCodeSource
+<div class="container">
+    <h1>Verify Login</h1>
+    <p>@Code</p>
+    <hr>
+
+    <label><b>Phone Number</b></label>
+    <input type="text" @bind="@OtpModel.PhoneNumber" placeholder="Last name" name="last name"
+           required>
+
+    <label for="psw-repeat"><b>Code</b></label>
+    <input type="number" @bind="@OtpModel.Code" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
+</div>
+
+<button type="submit" class="registerbtn" @onclick="VerifyLogin">Verify Login</button>

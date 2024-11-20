@@ -1,9 +1,9 @@
-﻿namespace LMS.Common.Models
+﻿using Microsoft.AspNetCore.Http;
+
+namespace LMS.Common.Models
 {
     public class AddOrUpdateContentModel
     {
-        public required string Name { get; set; }
-        public required string FileName { get; set; }
-        public required string ContentType { get; set; }
+        public required IFormFile FormFile {  get; set; }
     }
 }

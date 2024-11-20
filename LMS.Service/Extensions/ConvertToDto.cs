@@ -35,7 +35,7 @@ namespace LMS.Service.Extensions
         }
         public static List<UserDto> ParseToDtos(this List<User> users)
         {
-            if (users is null || users.Count == 0) return new List<UserDto>();
+            if (users is null || users.Count == 0) return [];
 
             var userDtos = new List<UserDto>();
             foreach (var user in users)
@@ -47,7 +47,7 @@ namespace LMS.Service.Extensions
 
         public static List<CourseDto> ParseToDtos(this List<Course> courses)
         {
-            if (courses.Count == 0 || courses is null) return new List<CourseDto>();
+            if (courses.Count == 0 || courses is null) return [];
 
             var courseDtos = new List<CourseDto>();
 
@@ -60,7 +60,7 @@ namespace LMS.Service.Extensions
 
         public static List<LessonDto> ParseToDtos(this List<Lesson> lessons)
         {
-            if (lessons.Count == 0 || lessons is null) return new List<LessonDto>();
+            if (lessons.Count == 0 || lessons is null) return [];
             var lessonDtos = new List<LessonDto>();
             foreach (var lesson in lessons)
             {
@@ -71,7 +71,7 @@ namespace LMS.Service.Extensions
 
         public static List<ContentDto> ParseToDtos(this List<Content> contents)
         {
-            if (contents.Count == 0 || contents is null) return new List<ContentDto>();
+            if (contents.Count == 0 || contents is null) return [];
             var contentDtos = new List<ContentDto>();
             foreach (var content in contents)
             {

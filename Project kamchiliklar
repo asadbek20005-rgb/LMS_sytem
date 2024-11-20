@@ -1,0 +1,8 @@
+Project kamchiliklar
+
+1. Code Generate qilingandan kegin expired bolishi kerak
+2. Verfy da Code ni tekshirish kerak bir biriga tengligini
+3. Login actionlarda role larini tekshirish kerak
+4. Client role da Login da faqat phone number kiritish kerak password shart emas
+5. Admin role ga Login va Verify Login action yozish
+6. Get All Courses ni Adminga yozish

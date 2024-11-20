@@ -58,17 +58,11 @@ namespace LMS.Data.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("GoogleDriveFileId")
-                        .HasColumnType("text");
-
                     b.Property<int>("LessonId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Url")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -131,14 +125,35 @@ namespace LMS.Data.Migrations
                     b.ToTable("Lessons");
                 });
 
+            modelBuilder.Entity("LMS.Data.Entities.OTP", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Code")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsExpired")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OTP");
+                });
+
             modelBuilder.Entity("LMS.Data.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("ConfirmPasswod")
-                        .HasColumnType("text");
+                    b.Property<int>("Code")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
@@ -165,6 +180,9 @@ namespace LMS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("Username")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.ToTable("Users");
@@ -172,13 +190,13 @@ namespace LMS.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("c15b8a07-3467-42ec-8299-be9996c8488a"),
-                            ConfirmPasswod = "Success",
+                            Id = new Guid("49440ca5-21f8-4c7e-86c8-b2591f882a4b"),
+                            Code = 0,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Asadbek",
                             IsBlocked = false,
                             LastName = "Shermatov",
-                            PasswordHash = "AQAAAAIAAYagAAAAELx4ISQTMS8ujQ1VanGn65ctkRchRLGzMzS5NpOf5yJhLLc0MRN2RMsyVb9qz3xrmQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFb20H3UDk8xCwy+rIDW/wdZddU3tRgCObFD62D1fCxH3g4aTLBIqZDrVvxajSd/2g==",
                             PhoneNumber = "+998945631282",
                             Role = "admin"
                         });
@@ -195,6 +213,9 @@ namespace LMS.Data.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsFree")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsOwner")
                         .HasColumnType("boolean");

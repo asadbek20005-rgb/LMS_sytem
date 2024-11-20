@@ -5,7 +5,7 @@ namespace LMS.Data.Repositories.Interfaces
 {
     public interface IContentRepository
     {
-        Task AddOrUpdateContent(Guid userId,Guid courseId,int lessonId,Stream stream, AddOrUpdateContentModel addOrUpdateContentModel);
+        Task AddOrUpdateContent(Content content);
         Task<Content> GetContentById(Guid userId, Guid courseId, int lessonId, int contentId);
         Task<List<Content>> GetAllContents(Guid userId, Guid courseId, int lessonId);
     }

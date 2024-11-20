@@ -1,16 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
 
 namespace LMS.Service.Helpers
 {
-    public class UserHelper
+    public class UserHelper(IHttpContextAccessor httpContextAccessor)
     {
-        private readonly IHttpContextAccessor? _httpContextAccessor;
-        public UserHelper(IHttpContextAccessor? httpContextAccessor)
-        {
-            _httpContextAccessor = httpContextAccessor;
-        }
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+
 
         public Guid GetUserId()
         {

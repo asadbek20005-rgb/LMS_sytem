@@ -1,6 +1,5 @@
 ﻿using LMS.Common.JwtModels;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -24,7 +23,7 @@ namespace LMS.Service.JwtToken
         public string GenerateToken(Data.Entities.User user)
         {
 
-           
+
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSetting.Key));
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -39,6 +38,7 @@ namespace LMS.Service.JwtToken
 
             var token = new JwtSecurityToken(
                 issuer: _jwtSetting.Issuer,
+                audience: _jwtSetting.Audience,
                 signingCredentials: cred,
                 claims: claims,
                 expires: DateTime.UtcNow.AddDays(1));
@@ -46,6 +46,6 @@ namespace LMS.Service.JwtToken
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-
+      
     }
 }

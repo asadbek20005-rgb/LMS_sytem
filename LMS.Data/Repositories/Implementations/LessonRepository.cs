@@ -1,53 +1,52 @@
 ﻿using LMS.Data.Context;
 using LMS.Data.Entities;
-using LMS.Data.Exceptions;
+using LMS.Data.Exceptions.Lesson;
 using LMS.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Data.Repositories.Implementations
 {
-    public class LessonRepository : ILessonRepository
+    public class LessonRepository(AppDbContext context) : ILessonRepository
     {
-        private readonly AppDbContext _context;
-        public LessonRepository(AppDbContext context)
+        private readonly AppDbContext _context = context;
+
+        public async Task CheckLessonExistForTitle(string title)
         {
-            _context = context;
+            var lesson = await _context.Lessons
+                .FirstOrDefaultAsync(x => x.Title == title);
+            if (lesson != null)
+                throw new SameLessonExistException($"Lesson with {title} is already exist");
         }
+
         public async Task CreateUserCourseLesson(Lesson lesson)
         {
             await _context.Lessons.AddAsync(lesson);
             await _context.SaveChangesAsync();
         }
 
-       
+
 
         public async Task<List<Lesson>> GetAllUserCourseLessons(Guid userId, Guid courseId)
         {
             var userCourse = await _context.User_Courses
-                .Where(x => x.UserId == userId && x.CourseId == courseId)
-                .FirstOrDefaultAsync();
+    .Include(uc => uc.Course)
+        .ThenInclude(c => c.Lessons) // Lessons obyektini yuklash
+    .Where(x => x.UserId == userId && x.CourseId == courseId)
+    .FirstOrDefaultAsync() ?? throw new Exceptions.User_Course.User_Course_NotFoundException();
 
-            if (userCourse == null)
-                throw new User_Course_NotFoundException();
-            var userCourseLessons = userCourse.Course?.Lessons?.ToList();
-
-            if (userCourseLessons is null)
-                throw new LessonNotFoundException();
-
+            var userCourseLessons = userCourse.Course?.Lessons?.ToList() ?? throw new Exceptions.Lesson.LessonNotFoundException();
             return userCourseLessons;
+
         }
 
         public async Task<Lesson> GetUserCourseLessonById(Guid userId, Guid courseId, int lessonId)
         {
             var userCourse = await _context.User_Courses
                 .Where(x => x.UserId == userId && x.CourseId == courseId)
-                .FirstOrDefaultAsync();
-
-            if (userCourse == null)
-                throw new User_Course_NotFoundException();
-            var userCourseLesson = userCourse.Course?.Lessons?.SingleOrDefault(x => x.Id == lessonId);
-            if (userCourseLesson is null)
-                throw new LessonNotFoundException();
+                .Include(uc => uc.Course)
+                .ThenInclude(uc => uc.Lessons)
+                .FirstOrDefaultAsync() ?? throw new LessonNotFoundException();
+            var userCourseLesson = (userCourse.Course?.Lessons?.SingleOrDefault(x => x.Id == lessonId)) ?? throw new LessonNotFoundException();
             return userCourseLesson;
         }
 

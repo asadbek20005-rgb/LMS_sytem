@@ -5,22 +5,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Data.Context
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        {
-
-        }
-
-        public DbSet<User> Users { get; set; }
-        public DbSet<Course> Courses { get; set; }
-        public DbSet<User_Course> User_Courses { get; set; }
-        public DbSet<Lesson> Lessons { get; set; }
-        public DbSet<Content> Contents { get; set; }
-        public DbSet<User_Course_Payment> User_Course_Payments { get; set; }
-        public DbSet<User_Course_Report> User_Course_Reports { get; set; }
-        public DbSet<CardInfo> CardInfos { get; set; }
-
+        public DbSet<User>? Users { get; set; }
+        public DbSet<Course>? Courses { get; set; }
+        public DbSet<User_Course>? User_Courses { get; set; }
+        public DbSet<Lesson>? Lessons { get; set; }
+        public DbSet<Content>? Contents { get; set; }
+        public DbSet<User_Course_Payment>? User_Course_Payments { get; set; }
+        public DbSet<User_Course_Report>? User_Course_Reports { get; set; }
+        public DbSet<CardInfo>? CardInfos { get; set; }
+        public DbSet<OTP>? OTP { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -33,20 +28,11 @@ namespace LMS.Data.Context
                 PhoneNumber = "+998945631282",
                 Role = Constants.Admin
             };
-
-
             string password = "spawn";
             var hashedPass = new PasswordHasher<User>().HashPassword(user, password);
             user.PasswordHash = hashedPass;
-            var confirmPass = new PasswordHasher<User>().VerifyHashedPassword(user, hashedPass, password).ToString();
-            user.ConfirmPasswod = confirmPass;
             users.Add(user);
             modelBuilder.Entity<User>().HasData(users);
         }
     }
-
-
-
-
 }
-

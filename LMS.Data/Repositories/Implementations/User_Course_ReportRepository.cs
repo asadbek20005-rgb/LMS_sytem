@@ -1,18 +1,16 @@
 ﻿using LMS.Data.Context;
 using LMS.Data.Entities;
 using LMS.Data.Exceptions;
+using LMS.Data.Exceptions.User_Course;
 using LMS.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace LMS.Data.Repositories.Implementations
 {
-    public class User_Course_ReportRepository : IUser_Course_Report
+    public class User_Course_ReportRepository(AppDbContext appDbContext) : IUser_Course_Report
     {
-        private readonly AppDbContext _context;
-        public User_Course_ReportRepository(AppDbContext appDbContext)
-        {
-            _context = appDbContext;
-        }
+        private readonly AppDbContext _context = appDbContext;
+
         public async Task CreateUser_Course_Report(User_Course_Report user_Course_Report)
         {
             await _context.User_Course_Reports.AddAsync(user_Course_Report);
@@ -31,17 +29,13 @@ namespace LMS.Data.Repositories.Implementations
 
         public async Task<User_Course_Report> GetUser_Course_ReportByCourseId(Guid courseId)
         {
-            var userCourseReport = await _context.User_Course_Reports.FindAsync(courseId);
-            if (userCourseReport == null)
-                throw new User_Course_ReportNotFoundException();
+            var userCourseReport = await _context.User_Course_Reports.FindAsync(courseId) ?? throw new User_Course_ReportNotFoundException();
             return userCourseReport;
         }
 
         public async Task<User_Course_Report> GetUser_Course_ReportByUserId(Guid userId)
         {
-            var userCourseReport = await _context.User_Course_Reports.FindAsync(userId);
-            if (userCourseReport == null)
-                throw new User_Course_ReportNotFoundException();
+            var userCourseReport = await _context.User_Course_Reports.FindAsync(userId) ?? throw new User_Course_ReportNotFoundException();
             return userCourseReport;
         }
 

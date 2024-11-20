@@ -41,14 +41,16 @@ api/admins/clientId/block-client
 [HttpDelete]
 api/admins/contentId/content-video
 
-
-
 Owners:
 [HttpPost]
 api/owners/account/register
 
 [HttpPost]
 api/owners/account/register/verify-register
+
+[HttpPost]
+api/owners/account/login
+
 
 [HttpPost]
 api/owners/account/login/verif-login
@@ -64,8 +66,14 @@ Owner Courses:
 [HttpPost]
 api/owners/ownerId/courses
 
+[HttpPost]
+api/owners/ownerId/courses/free
+	
 [HttpGet]
 api/owners/ownerId/courses
+
+[HttpGet]
+api/owners/ownerId/courses/free
 
 [HttpPut]
 api/owners/ownerId/courses/courseId/set-price
@@ -85,7 +93,6 @@ api/owners/ownerId/courses/couresId/lessons
 
 [HttpPut]
 api/owners/ownerId/courses/couresId/lessons/lessonId/set-name
-
 
 
 Owner Contents:
@@ -110,13 +117,13 @@ api/clients/clientId/courses
 [HttpGet]
 api/clients/clientId/courses/courseId
 
-
 Client Lessons:
 [HttpGet]
 api/clients/clientId/courses/lessons
 
 [HttpGet]
 api/clients/clientId/courses/lessons/lessonId
+
 
 Payments:
 [HttpPost]
@@ -158,13 +165,8 @@ api/clients/clientId/cards/cardId/card-holder-number
 api/clients/clientId/cards/cardId/cvv-hash
 
 
-[HttpDelete]
-api/clients/clientId/cards/cardId
-
 
 SMS Varification:
-
-
 [HttpPost]
 api/sms
 

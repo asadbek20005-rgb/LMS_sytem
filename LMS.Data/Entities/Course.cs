@@ -1,4 +1,6 @@
-﻿namespace LMS.Data.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace LMS.Data.Entities
 {
     public class Course
     {
@@ -7,7 +9,7 @@
         public string? Description { get; set; }
         public required decimal Price { get; set; }
         public required string Category { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
 
         public List<User_Course>? Users { get; set; }

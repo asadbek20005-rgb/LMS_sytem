@@ -16,6 +16,7 @@ namespace LMS.Data.Entities
 
         public bool IsOwner { get; set; }
         public bool IsPayed { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public bool IsFree { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
     }
 }
