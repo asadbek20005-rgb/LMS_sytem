@@ -182,7 +182,7 @@ namespace LMS.Service.Api
             if (verfyPas == PasswordVerificationResult.Failed)
             {
                 throw new Exception($"The validation password is failed!");
-
+                 
             }
         }
 
