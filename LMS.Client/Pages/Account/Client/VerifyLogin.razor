@@ -1,17 +1,180 @@
 ﻿@page "/pages/account/client/verify-login/{code}"
 @inherits RazorPageCodeSource.Client.VerifyLoginCodeSource
-<div class="container">
-    <h1>Verify Login</h1>
-    <p>@Code</p>
-    <hr>
 
-    <label><b>Phone Number</b></label>
-    <input type="text" @bind="@OtpModel.PhoneNumber" placeholder="Last name" name="last name"
-           required>
+<div class="verify-container">
+    <div class="form-card">
+        <h1>Verify Your Login</h1>
+        <p class="form-description">Enter the code sent to your phone to verify your login</p>
+        <hr>
 
-    <label for="psw-repeat"><b>Code</b></label>
-    <input type="number" @bind="@OtpModel.Code" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
+        <div class="form-group">
+            <label for="phoneNumber"><b>Phone Number</b></label>
+            <input type="text" id="phoneNumber" @bind="@OtpModel.PhoneNumber" placeholder="Enter your phone number" required>
+        </div>
+
+        <div class="form-group">
+            <label for="code"><b>Verification Code</b></label>
+            <input type="number" id="code" @bind="@OtpModel.Code" placeholder="Enter the verification code" required>
+        </div>
+
+        <!-- Dynamic Code Display -->
+        <div class="code-display">
+            <p>Your code is:</p>
+            <button class="code-display-btn">@Code</button>
+        </div>
+
+        <button type="submit" class="btn-primary" @onclick="VerifyLogin">Verify Login</button>
+
+        <div class="resend">
+        </div>
+    </div>
 </div>
 
-<button type="submit" class="registerbtn" @onclick="VerifyLogin">Verify Login</button>
+<style>
+    /* General Styles */
+    /* body { */
+    /*     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+    /*     margin: 0; */
+    /*     padding: 0; */
+    /*     display: flex; */
+    /*     justify-content: center; */
+    /*     align-items: center; */
+    /*     height: 100vh; */
+    /*     background: linear-gradient(135deg, #ffe259, #ffa751); */
+    /* } */
 
+    .verify-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+    }
+
+    .form-card {
+        background-color: #fff;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        width: 100%;
+    }
+
+        .form-card h1 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+    .form-description {
+        font-size: 1rem;
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    hr {
+        border: none;
+        border-top: 1px solid #ddd;
+        margin-bottom: 20px;
+    }
+
+    /* Form Group Styles */
+    .form-group {
+        text-align: left;
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            font-size: 1rem;
+            color: #444;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+            .form-group input:focus {
+                background-color: #fff8dc;
+                border-color: #ffa751;
+                outline: none;
+                box-shadow: 0 0 5px rgba(255, 165, 81, 0.5);
+            }
+
+    /* Code Display Styles */
+    .code-display {
+        margin: 20px 0;
+        text-align: center;
+    }
+
+        .code-display p {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+    .code-display-btn {
+        background-color: #04AA6D;
+        color: white;
+        padding: 12px 20px;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+        .code-display-btn:hover {
+            background-color: #03a05d;
+        }
+
+    /* Button Styles */
+    .btn-primary {
+        width: 100%;
+        padding: 15px;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #fff;
+        background: linear-gradient(90deg, #ff7e5f, #feb47b);
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #feb47b, #ff7e5f);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+            box-shadow: none;
+        }
+
+    /* Resend Link Styles */
+    .resend {
+        margin-top: 20px;
+        font-size: 0.9rem;
+        color: #555;
+    }
+
+        .resend a {
+            color: #ff7e5f;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.2s ease;
+        }
+
+            .resend a:hover {
+                color: #ff6b43;
+            }
+</style>

@@ -36,7 +36,7 @@ namespace LMS.Service.Otp
         {
             var otpValue = _memoryCacheService.GetPhoneNumberCode(otpModel.PhoneNumber);
 
-            return otpModel;
+            return otpValue;
         }
 
 

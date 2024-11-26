@@ -21,5 +21,8 @@
         public const string RegisterNotSuccessfull = "Register not successfull";
         public const string LoginNotSuccessfull = "Login not successfull";
         public const string CacheOwnerKey = "owner";
+        public const string CacheClientKey = "client";
+        public const string BucketName = "minio_training";
+        public const string TokenKey  = "token";
     }
 }

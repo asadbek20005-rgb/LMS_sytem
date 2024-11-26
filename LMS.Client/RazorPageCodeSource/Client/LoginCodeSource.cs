@@ -12,7 +12,6 @@ namespace LMS.Client.RazorPageCodeSource.Client
 
         public async Task Login()
         {
-
             var (statusCode, code) = await ClientIntegration.Login(model);
             if (statusCode == System.Net.HttpStatusCode.OK)
                 NavigationManager.NavigateTo($"/pages/account/client/verify-login/{code}");

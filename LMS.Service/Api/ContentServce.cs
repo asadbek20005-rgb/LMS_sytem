@@ -4,17 +4,33 @@ using LMS.Data.Entities;
 using LMS.Data.Repositories.Interfaces;
 using LMS.Service.Extensions;
 using LMS.Service.Helpers;
+using LMS.Service.MinioStorage;
 
 namespace LMS.Service.Api
 {
-    public class ContentServce(IContentRepository contentRepository, ILessonRepository lessonRepository)
+    public class ContentServce(IContentRepository contentRepository,MinioStorageService minioStorageService)
     {
         private readonly IContentRepository _contentRepository = contentRepository;
-        private readonly ILessonRepository _lessonRepository = lessonRepository;
         public async Task<ContentDto> AddOrUpdateContent(Guid userId, Guid courseId, int lessonId, AddOrUpdateContentModel addOrUpdateContentModel)
         {
             try
             {
+                //var vedioFile = addOrUpdateContentModel.FormFile;
+                //var contentType = vedioFile.ContentType;
+                //long size = vedioFile.Length;
+                //var fileName = Guid.NewGuid().ToString();
+                //MemoryStream memoryStream = new MemoryStream();
+                //await vedioFile.CopyToAsync(memoryStream);
+                //await _minioStorageService.UploadFileAsync(fileName, memoryStream, contentType);
+
+                //var newContent = new Content
+                //{
+                //    Name = fileName              
+                //};
+
+                //await _contentRepository.AddOrUpdateContent(newContent);
+                //return newContent.ParseToDto();
+
                 var videoFile = addOrUpdateContentModel.FormFile;
                 ContentHelper.IsVideo(videoFile);
                 var data = await ContentHelper.GetBytes(videoFile);
@@ -100,7 +116,6 @@ namespace LMS.Service.Api
         {
             try
             {
-
                 var contents = await _contentRepository.GetAllContents(userId, courseId, lessonId);
                 return contents.ParseToDtos();
             }
@@ -110,7 +125,7 @@ namespace LMS.Service.Api
             }
         }
 
-        public async Task<ContentDto> GetContent(Guid userId, Guid courseId, int lessonId, int contentId)
+        public async Task<ContentDto> GetContent(Guid userId, Guid courseId, int lessonId, int contentId, string filename)
         {
             try
             {

@@ -51,7 +51,7 @@ namespace LMS.Api.Controllers.Owner
 
         [HttpGet]
         [Authorize(Roles = Constants.Owner)]
-        public async Task<IActionResult> GetAllUserCourse()
+        public async Task<IActionResult> GetAllOwnerCourse()
         {
             try
             {

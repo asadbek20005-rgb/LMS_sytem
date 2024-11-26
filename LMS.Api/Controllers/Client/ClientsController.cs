@@ -17,25 +17,18 @@ namespace LMS.Api.Controllers.Client
           int code =  await _clientService.Register(userRegisterModel);
             return Ok(code);
         }
-
-
         [HttpPost("account/verify-register")]
         public async Task<IActionResult> VerifyRegister(OtpModel otpModel)
         {
             string result = await _clientService.VerifyRegister(otpModel);
             return Ok(result);
         }
-
-
-
-
         [HttpPost("account/login")]
         public async Task<IActionResult> Login(ClientLoginModel userLoginModel)
         {
             var token = await _clientService.Login(userLoginModel);
             return Ok(token);
         }
-
 
         [HttpPost("account/verify-login")]
         public async Task<IActionResult> VerifyLogin(OtpModel otpModel)

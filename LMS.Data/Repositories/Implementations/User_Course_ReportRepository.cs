@@ -24,7 +24,7 @@ namespace LMS.Data.Repositories.Implementations
 
         public async Task<List<User_Course_Report>> GetAllUser_Course_Repos()
         {
-            return await _context.User_Course_Reports.ToListAsync();
+            return await _context.User_Course_Reports.AsNoTracking().ToListAsync();
         }
 
         public async Task<User_Course_Report> GetUser_Course_ReportByCourseId(Guid courseId)

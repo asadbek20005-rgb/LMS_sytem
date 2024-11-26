@@ -1,91 +1,164 @@
 ﻿@page "/pages/account/client/register"
 @inherits RazorPageCodeSource.Client.RegisterCodeSource
 
+<div class="register-container">
+    <div class="form-card">
+        <h1>Create Account</h1>
+        <p class="form-description">Fill in the details to register</p>
+        <hr>
 
-<div class="container">
-    <h1>Register</h1>
-    <p>Please fill in this form to create an account.</p>
-    <hr>
+        <div class="form-group">
+            <label for="firstName"><b>First Name</b></label>
+            <input type="text" id="firstName" @bind="@model.FirstName" placeholder="Enter your first name" required>
+        </div>
 
-    <label><b>First name</b></label>
-    <input type="text" @bind="@model.FirstName" placeholder="First name" name="first name"
-           required>
+        <div class="form-group">
+            <label for="lastName"><b>Last Name</b></label>
+            <input type="text" id="lastName" @bind="@model.LastName" placeholder="Enter your last name" required>
+        </div>
 
-    <label><b>Last name</b></label>
-    <input type="text" @bind="@model.LastName" placeholder="Last name" name="last name"
-           required>
+        <div class="form-group">
+            <label for="phoneNumber"><b>Phone Number</b></label>
+            <input type="text" id="phoneNumber" @bind="@model.PhoneNumber" placeholder="Enter your phone number" required>
+        </div>
 
-    <label><b>Phone Number</b></label>
-    <input type="text" @bind="@model.PhoneNumber" placeholder="Last name" name="last name"
-           required>
- 
-    <label for="psw"><b>Password</b></label>
-    <input type="password" @bind="@model.Password" placeholder="Enter Password" name="psw" id="psw" required>
+        <div class="form-group">
+            <label for="password"><b>Password</b></label>
+            <input type="password" id="password" @bind="@model.Password" placeholder="Enter your password" required>
+        </div>
 
-    <label for="psw-repeat"><b>Repeat Password</b></label>
-    <input type="password" @bind="@model.ConfirmPassword" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
+        <div class="form-group">
+            <label for="confirmPassword"><b>Confirm Password</b></label>
+            <input type="password" id="confirmPassword" @bind="@model.ConfirmPassword" placeholder="Confirm your password" required>
+        </div>
+
+        <button type="submit" class="btn-primary" @onclick="Register">Register</button>
+
+        <div class="signin">
+            <p>Already have an account? <a href="/pages/account/client/login">Login here</a></p>
+        </div>
+    </div>
 </div>
 
-<button type="submit" class="registerbtn" @onclick="Register">Register</button>
-
-
 <style>
+    /* General Styles */
+    /* body { */
+    /*     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+    /*     margin: 0; */
+    /*     padding: 0; */
+    /*     display: flex; */
+    /*     justify-content: center; */
+    /*     align-items: center; */
+    /*     height: 100vh; */
+    /*     background: linear-gradient(135deg, #89f7fe, #66a6ff); */
+    /* } */
 
-    * {
-        box-sizing: border-box;
+    .register-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
     }
 
-    /* Add padding to containers */
-    .container {
-        padding: 16px;
-        background-color: white;
+    .form-card {
+        background-color: #fff;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        width: 100%;
     }
 
-    /* Full-width input fields */
-    input[type=text], input[type=password] {
+        .form-card h1 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+    .form-description {
+        font-size: 1rem;
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    hr {
+        border: none;
+        border-top: 1px solid #ddd;
+        margin-bottom: 20px;
+    }
+
+    /* Form Group Styles */
+    .form-group {
+        text-align: left;
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            font-size: 1rem;
+            color: #444;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            transition: all 0.3s ease;
+        }
+
+            .form-group input:focus {
+                background-color: #eef6ff;
+                border-color: #007BFF;
+                outline: none;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            }
+
+    /* Button Styles */
+    .btn-primary {
         width: 100%;
         padding: 15px;
-        margin: 5px 0 22px 0;
-        display: inline-block;
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #fff;
+        background: linear-gradient(90deg, #42a5f5, #0077ff);
         border: none;
-        background: #f1f1f1;
-    }
-
-        input[type=text]:focus, input[type=password]:focus {
-            background-color: #ddd;
-            outline: none;
-        }
-
-    /* Overwrite default styles of hr */
-    hr {
-        border: 1px solid #f1f1f1;
-        margin-bottom: 25px;
-    }
-
-    /* Set a style for the submit button */
-    .registerbtn {
-        background-color: #04AA6D;
-        color: white;
-        padding: 16px 20px;
-        margin: 8px 0;
-        border: none;
+        border-radius: 25px;
         cursor: pointer;
-        width: 100%;
-        opacity: 0.9;
+        transition: all 0.3s ease;
     }
 
-        .registerbtn:hover {
-            opacity: 1;
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #0077ff, #42a5f5);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
         }
 
-    /* Add a blue text color to links */
-    a {
-        color: dodgerblue;
+        .btn-primary:active {
+            transform: translateY(1px);
+            box-shadow: none;
+        }
+
+    /* Sign-in Link Styles */
+    .signin {
+        margin-top: 20px;
+        font-size: 0.9rem;
+        color: #555;
     }
 
-    /* Set a grey background color and center the text of the "sign in" section */
-    .signin {
-        background-color: #f1f1f1;
-        text-align: center;
-    }
+        .signin a {
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.2s ease;
+        }
+
+            .signin a:hover {
+                color: #0056b3;
+            }
 </style>

@@ -5,7 +5,7 @@ using LMS.Data.Repositories.Interfaces;
 using LMS.Service.Extensions;
 using LMS.Service.JwtToken;
 using Microsoft.AspNetCore.Identity;
-    
+
 namespace LMS.Service.Api
 {
     public class AdminService(JwtTokenService jwtTokenService, ContentServce contentServce, IUserRepository userRepository, ICourseRepository courseRepository)
@@ -14,9 +14,9 @@ namespace LMS.Service.Api
         private readonly ICourseRepository _courseRepository = courseRepository;
         private readonly ContentServce _contentService = contentServce;
         private readonly JwtTokenService _jwtTokenService = jwtTokenService;
-        public async Task<string> Login(AdminLoginModel adminLoginModel) 
-        { 
-            try 
+        public async Task<string> Login(AdminLoginModel adminLoginModel)
+        {
+            try
             {
                 var user = await _userRepository.GetUserByUsername(adminLoginModel.Username);
                 await IsAdminRole(user);
@@ -95,7 +95,6 @@ namespace LMS.Service.Api
             if (verfyPas == PasswordVerificationResult.Failed)
             {
                 throw new Exception($"The validation password is failed!");
-
             }
         }
 
@@ -107,7 +106,6 @@ namespace LMS.Service.Api
                 await _userRepository.VerifyUsername(username: user.Username);
             }
         }
-
 
         private async Task IsAdminRole(User user)
         {

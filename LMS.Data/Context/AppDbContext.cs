@@ -26,6 +26,7 @@ namespace LMS.Data.Context
                 FirstName = "Asadbek",
                 LastName = "Shermatov",
                 PhoneNumber = "+998945631282",
+                Username = "spawn",
                 Role = Constants.Admin
             };
             string password = "spawn";

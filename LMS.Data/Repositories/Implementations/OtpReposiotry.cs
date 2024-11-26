@@ -12,7 +12,7 @@ namespace LMS.Data.Repositories.Implementations
 
         public async Task CheckCodeExpired(int code)
         {
-            var otp = await _context.OTP.SingleOrDefaultAsync(x => x.Code == code);
+            var otp = await _context.OTP.AsNoTracking().SingleOrDefaultAsync(x => x.Code == code);
             if (otp != null)
                 if (otp.IsExpired == true)
                     throw new ExpiredCodeException($"The code with {code} is expired");

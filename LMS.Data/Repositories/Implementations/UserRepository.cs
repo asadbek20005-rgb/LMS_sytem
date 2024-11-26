@@ -14,7 +14,7 @@ namespace LMS.Data.Repositories.Implementations
 
         public async Task CheckUserPhone(string userPhoneNumber)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.PhoneNumber == userPhoneNumber);
+            var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.PhoneNumber == userPhoneNumber);
             if (user != null)
                 throw new SameUserExistException($"There is a user with {userPhoneNumber}, please enter another number");
         }
@@ -29,7 +29,7 @@ namespace LMS.Data.Repositories.Implementations
 
         public async Task<List<User>> GetAllUsers()
         {
-            var users = await _context.Users.ToListAsync();
+            var users = await _context.Users.AsNoTracking().ToListAsync();
             return users;
         }
 
@@ -41,7 +41,7 @@ namespace LMS.Data.Repositories.Implementations
 
         public async Task<User> GetUserByPhoneNumber(string phoneNumber)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber) ?? throw new UserNotFoundException();
+            var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber) ?? throw new UserNotFoundException();
             return user;
         }
 
@@ -61,7 +61,7 @@ namespace LMS.Data.Repositories.Implementations
 
         public async Task<User> GetUserByUsername(string username)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Username == username) ?? throw new UserNotFoundException();
+            var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Username == username) ?? throw new UserNotFoundException();
             return user;
         }
 
@@ -71,7 +71,7 @@ namespace LMS.Data.Repositories.Implementations
             if (users is null)
                 throw new UserNotFoundException();
 
-            var haveUsername = await users.AnyAsync(x => x.Username == username);
+            var haveUsername = await users.AsNoTracking().AnyAsync(x => x.Username == username);
             if (haveUsername)
                 throw new SameUserExistException($"User with {username} is already exist");
         }
@@ -82,14 +82,14 @@ namespace LMS.Data.Repositories.Implementations
             if (users is null)
                 throw new UserNotFoundException();
 
-            var haveUsername = await users.AnyAsync(x => x.Username == username);
+            var haveUsername = await users.AsNoTracking().AnyAsync(x => x.Username == username);
             if (!haveUsername)
                 throw new UsernameNotVerified();
         }
 
         public async Task CheckRoleClient(string role)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Role == role);
+            var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Role == role);
 
             if (user is null)
                 throw new UserNotFoundException();
@@ -101,7 +101,7 @@ namespace LMS.Data.Repositories.Implementations
 
         public async Task CheckRoleOwner(string role)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Role == role);
+            var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Role == role);
 
             if (user is null)
                 throw new UserNotFoundException();
@@ -112,12 +112,12 @@ namespace LMS.Data.Repositories.Implementations
 
         public async Task CheckRoleAdmin(string role)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Role == role);
+            var user = await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Role == role);
 
             if (user is null)
                 throw new UserNotFoundException();
 
-            if (user.Role != Constants.Client)
+            if (user.Role != Constants.Admin)
                 throw new RoleNotVerifyException("Role must be <<Admin>>");
         }
     }

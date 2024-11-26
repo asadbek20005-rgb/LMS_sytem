@@ -1,13 +1,115 @@
 ﻿@page "/pages/course"
+@inherits RazorPageCodeSource.Course.CourseCodeSource
 
-<div class="card">
-    @* <img src="img_avatar.png" alt="Avatar" style="width:100%"> *@
-    <div class="container">
-        <h4><b></b></h4>
-        <p>Architect & Engineer</p>
-    </div>
+<div class="courses-container">
+    @foreach (var course in Courses)
+    {
+        <div class="card">
+            @* <img src="@course.ImageUrl ?? " img_avatar.png"" alt="Course Image" class="card-img"> *@
+            <div class="card-content">
+                <h4 class="course-title">@course.Title</h4>
+                <p class="course-description">@course.Description</p>
+                <p class="course-category">Category: <b>@course.Category</b></p>
+                <p class="course-price"><b>@course.Price</b> $</p>
+                <p class="course-date">Created: @course.CreatedDate.ToString("MMMM dd, yyyy")</p>
+                <button class="buy-button">Buy Now</button>
+            </div>
+        </div>
+    }
 </div>
 
-@code {
+<style>
+    /* General container styling */
+    .courses-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: center;
+        padding: 30px;
+        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+    }
 
-}
+    /* Card styles */
+    .card {
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        width: 320px;
+        overflow: hidden;
+        text-align: center;
+    }
+
+        /* Card hover effect */
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+        }
+
+    /* Image styles */
+    .card-img {
+        width: 100%;
+        height: 200px;
+        border-radius: 15px 15px 0 0;
+        object-fit: cover;
+    }
+
+    /* Content inside the card */
+    .card-content {
+        padding: 20px;
+    }
+
+    .course-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .course-description {
+        font-size: 1rem;
+        color: #555;
+        margin-bottom: 15px;
+    }
+
+    .course-category {
+        font-size: 0.9rem;
+        color: #888;
+        margin-bottom: 10px;
+    }
+
+    .course-price {
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: #FF5722;
+        margin: 15px 0;
+    }
+
+    .course-date {
+        font-size: 0.85rem;
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    /* Buy button styles */
+    .buy-button {
+        background: linear-gradient(90deg, #ff8a00 0%, #e52e71 100%);
+        border: none;
+        color: white;
+        padding: 12px 20px;
+        font-size: 1rem;
+        font-weight: bold;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+        .buy-button:hover {
+            background: linear-gradient(90deg, #e52e71 0%, #ff8a00 100%);
+            transform: scale(1.1);
+        }
+
+        .buy-button:active {
+            transform: scale(1.05);
+        }
+</style>

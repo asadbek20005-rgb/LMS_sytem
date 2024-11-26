@@ -1,13 +1,15 @@
-﻿using LMS.Common.Models.AccountModels;
+﻿using LMS.Client.LocalStorage;
+using LMS.Common.Models.AccountModels;
 using LMS.Common.OTPModels;
 using System.Net;
 using System.Net.Http.Json;
 
 namespace LMS.Client.Integrations.Owner
 {
-    public class OwnerIntegration(HttpClient httpClient) : IOwnerIntegration
+    public class OwnerIntegration(HttpClient httpClient, LocalStorageService localStorageService) : IOwnerIntegration
     {
         private readonly HttpClient _httpClient = httpClient;
+        private readonly LocalStorageService _localStorage = localStorageService;
 
         public async Task<Tuple<HttpStatusCode, string>> Login(OwnerLoginModel ownerLoginModel)
         {
@@ -27,8 +29,10 @@ namespace LMS.Client.Integrations.Owner
 
         public async Task<HttpStatusCode> VerifyLogin(OtpModel otpModel)
         {
-            string url = "/api/Owners/account/verify-login";    
+            string url = "/api/Owners/account/verify-login";
             var response = await _httpClient.PostAsJsonAsync(url, otpModel);
+            var token = await response.Content.ReadAsStringAsync();
+            await _localStorage.SetToken(token);
             return response.StatusCode;
         }
 

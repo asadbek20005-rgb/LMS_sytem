@@ -12,7 +12,7 @@ namespace LMS.Data.Repositories.Implementations
 
         public async Task CheckCourseFoTitle(string title)
         {
-            var course = await _context.Courses.FirstOrDefaultAsync(x => x.Title == title);
+            var course = await _context.Courses.AsNoTracking().FirstOrDefaultAsync(x => x.Title == title);
             var checkingForTitle = course != null;
             if (checkingForTitle)
                 throw new SameCourseException($"Course with title <<{title}>> is already exist");
@@ -27,14 +27,16 @@ namespace LMS.Data.Repositories.Implementations
 
         public async Task<List<Course>> GetAllCourses()
         {
-            return await _context.Courses.ToListAsync();
+            return await _context.Courses.AsNoTracking().ToListAsync();
         }
 
         public async Task<List<Course>> GetAllUserCourses(Guid userId)
         {
             var userCourse = await _context.User_Courses
+                .AsNoTracking()
                 .Include(x => x.Course)
                 .Where(x => x.UserId == userId)
+                .AsNoTracking()
                 .ToListAsync();
 
             var courses = userCourse.Select(uc => uc.Course).ToList();
@@ -49,26 +51,28 @@ namespace LMS.Data.Repositories.Implementations
                 .AsNoTracking()
                 .Include(x => x.Course);          
                 var res = await userCourse.Where(x => x.UserId == userId && x.CourseId == courseId)
+                .AsNoTracking()
                   .Select(uc => uc.Course)
+                  .AsNoTracking()
                   .FirstOrDefaultAsync() ?? throw new CourseNotFoundException();
                 return res;
         }
 
         public async Task<List<Course>> SeachUserCourseByCategory(string category)
         {
-            var userCourses = _context.Courses.AsQueryable();
+            var userCourses = _context.Courses.AsNoTracking().AsQueryable();
 
             if (!string.IsNullOrEmpty(category))
             {
-                userCourses = userCourses.Where(x => x.Category.Contains(category));
+                userCourses = userCourses.AsNoTracking().Where(x => x.Category.Contains(category));
             }
 
-            return await userCourses.ToListAsync();
+            return await userCourses.AsNoTracking().ToListAsync();
         }
 
         public async Task<List<Course>> SearchUserCourseBy(string? category = null, string? title = null, decimal? price = null)
         {
-            var userCourses = _context.Courses.AsQueryable();
+            var userCourses = _context.Courses.AsNoTracking().AsQueryable();
 
             if (!string.IsNullOrEmpty(category))
             {
@@ -85,7 +89,7 @@ namespace LMS.Data.Repositories.Implementations
                 userCourses = userCourses.Where(x => x.Price == price);
             }
 
-            return await userCourses.ToListAsync();
+            return await userCourses.AsNoTracking().ToListAsync();
         }
 
 

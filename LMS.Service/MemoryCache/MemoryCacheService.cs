@@ -25,9 +25,9 @@ namespace LMS.Service.MemoryCache
             return value;   
         }
 
-        public void SetEntity(object entity)
+        public void SetEntity(string key,object entity)
         {
-            _memoryCache.Set(Constants.CacheOwnerKey, entity, TimeSpan.FromMinutes(Constants.CodeExpiryTime));
+            _memoryCache.Set(key: key, entity, TimeSpan.FromMinutes(Constants.CodeExpiryTime));
         }
 
         public object? GetEntity(string key)

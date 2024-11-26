@@ -1,4 +1,5 @@
 using LMS.Common.JwtModels;
+using LMS.Common.MinioModels;
 using LMS.Data.Context;
 using LMS.Data.Entities;
 using LMS.Data.Repositories.Implementations;
@@ -8,6 +9,7 @@ using LMS.Service.File;
 using LMS.Service.Helpers;
 using LMS.Service.JwtToken;
 using LMS.Service.MemoryCache;
+using LMS.Service.MinioStorage;
 using LMS.Service.Otp;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -50,6 +52,12 @@ builder.Services.AddScoped<User_Course_PaymentService>();
 builder.Services.AddScoped<OtpService>();
 builder.Services.AddScoped<MemoryCacheService>();
 builder.Services.AddScoped<FileService>();
+builder.Services.AddScoped<MinioStorageService>(provider =>
+{
+    var settings = builder.Configuration.GetSection("Minio").Get<StorageFile>();
+    return new MinioStorageService(settings.Endpoint, settings.AccessKey, settings.SecretKey);
+});
+
 builder.Services.AddMemoryCache();
 builder.Services.AddCors(options =>
 {

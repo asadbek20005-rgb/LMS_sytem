@@ -24,7 +24,7 @@ public class ClientService(MemoryCacheService memoryCacheService, IUserRepositor
         try
         {
             await _userRepository.CheckUserPhone(userPhoneNumber: userRegisterModel.PhoneNumber);
-
+            CheckPhonenumberCache(userRegisterModel.PhoneNumber);
 
             var newUser = new User
             {
@@ -48,7 +48,7 @@ public class ClientService(MemoryCacheService memoryCacheService, IUserRepositor
                 var passwordHashing = new PasswordHasher<User>().HashPassword(newUser, userRegisterModel.Password);
                 newUser.PasswordHash = passwordHashing;
             }
-            _memoryCacheService.SetEntity(newUser);
+            _memoryCacheService.SetEntity(Constants.CacheClientKey,newUser);
             int code = _otpService.GenerateCode(newUser.PhoneNumber);
             return code;
         }
@@ -69,7 +69,7 @@ public class ClientService(MemoryCacheService memoryCacheService, IUserRepositor
 
             if (code != otpModel.Code)
                 throw new Exception("The code is not valid");
-
+                
             var newOtp = new OTP
             {
                 Code = otpModel.Code,
@@ -80,7 +80,7 @@ public class ClientService(MemoryCacheService memoryCacheService, IUserRepositor
 
             await _otpRepository.Create(newOtp);
 
-            var value = _memoryCacheService.GetEntity(Constants.CacheOwnerKey);
+            var value = _memoryCacheService.GetEntity(Constants.CacheClientKey);
 
             if (value == null)
             {
@@ -108,7 +108,7 @@ public class ClientService(MemoryCacheService memoryCacheService, IUserRepositor
             var user = await _userRepository.GetUserByPhoneNumber(userLoginModel.PhoneNumber);
             await IsClientRole(user);
             IsBlocked(user);
-            _memoryCacheService.SetEntity(user);
+            _memoryCacheService.SetEntity(Constants.CacheClientKey,user);
             int code = _otpService.GenerateCode(phoneNumber: userLoginModel.PhoneNumber);
             return code;
 
@@ -128,7 +128,7 @@ public class ClientService(MemoryCacheService memoryCacheService, IUserRepositor
         {
 
             await _otpService.CheckCodeExpired(otpModel.Code);
-            var code = (int)_otpService.VerifyRegister(otpModel);
+            int code = (int)_otpService.VerifyLogin(otpModel);
 
             if (code != otpModel.Code)
                 throw new Exception("The code is not valid");
@@ -143,7 +143,7 @@ public class ClientService(MemoryCacheService memoryCacheService, IUserRepositor
 
             await _otpRepository.Create(newOtp);
 
-            var value = _memoryCacheService.GetEntity(Constants.CacheOwnerKey);
+            var value = _memoryCacheService.GetEntity(Constants.CacheClientKey);
 
             if (value == null)
             {
@@ -177,5 +177,17 @@ public class ClientService(MemoryCacheService memoryCacheService, IUserRepositor
     {
         await _userRepository.CheckRoleClient(user.Role);
 
+    }
+
+    private void CheckPhonenumberCache(string phoneNumber)
+    {
+        var entity = _memoryCacheService.GetEntity(Constants.CacheClientKey);
+
+
+        var user = (User)entity;
+
+
+        if (phoneNumber == user?.PhoneNumber)
+            throw new Exception($"The phonenumber with {phoneNumber} is already exist");
     }
 }

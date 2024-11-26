@@ -13,6 +13,7 @@ namespace LMS.Data.Repositories.Implementations
         public async Task CheckLessonExistForTitle(string title)
         {
             var lesson = await _context.Lessons
+                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Title == title);
             if (lesson != null)
                 throw new SameLessonExistException($"Lesson with {title} is already exist");
@@ -29,9 +30,11 @@ namespace LMS.Data.Repositories.Implementations
         public async Task<List<Lesson>> GetAllUserCourseLessons(Guid userId, Guid courseId)
         {
             var userCourse = await _context.User_Courses
+                .AsNoTracking()
     .Include(uc => uc.Course)
         .ThenInclude(c => c.Lessons) // Lessons obyektini yuklash
     .Where(x => x.UserId == userId && x.CourseId == courseId)
+    .AsNoTracking()
     .FirstOrDefaultAsync() ?? throw new Exceptions.User_Course.User_Course_NotFoundException();
 
             var userCourseLessons = userCourse.Course?.Lessons?.ToList() ?? throw new Exceptions.Lesson.LessonNotFoundException();
@@ -42,9 +45,11 @@ namespace LMS.Data.Repositories.Implementations
         public async Task<Lesson> GetUserCourseLessonById(Guid userId, Guid courseId, int lessonId)
         {
             var userCourse = await _context.User_Courses
+                .AsNoTracking()
                 .Where(x => x.UserId == userId && x.CourseId == courseId)
                 .Include(uc => uc.Course)
                 .ThenInclude(uc => uc.Lessons)
+                .AsNoTracking()
                 .FirstOrDefaultAsync() ?? throw new LessonNotFoundException();
             var userCourseLesson = (userCourse.Course?.Lessons?.SingleOrDefault(x => x.Id == lessonId)) ?? throw new LessonNotFoundException();
             return userCourseLesson;

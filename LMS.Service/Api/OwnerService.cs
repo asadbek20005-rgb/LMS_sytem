@@ -25,8 +25,8 @@ namespace LMS.Service.Api
             {
                 await _userRepository.CheckUserPhone(userPhoneNumber: userRegisterModel.PhoneNumber);
                 await _userRepository.CheckUsername(username: userRegisterModel.Username);
-
-
+                CheckUsernameCache(userRegisterModel.Username);
+                CheckPhonenumberCache(userRegisterModel.PhoneNumber);
                 var newUser = new User
                 {
                     FirstName = userRegisterModel.FirstName,
@@ -50,7 +50,7 @@ namespace LMS.Service.Api
                     var passwordHashing = new PasswordHasher<User>().HashPassword(newUser, userRegisterModel.Password);
                     newUser.PasswordHash = passwordHashing;
                 }
-                _memoryCacheService.SetEntity(newUser);
+                _memoryCacheService.SetEntity(Constants.CacheOwnerKey,newUser);
                 int code = _otpService.GenerateCode(newUser.PhoneNumber);
                 return code;
             }
@@ -114,7 +114,7 @@ namespace LMS.Service.Api
                 VerifyUsername(user);
                 VerfyPassword(user, userLoginModel.Password);
 
-                _memoryCacheService.SetEntity(user);
+                _memoryCacheService.SetEntity(Constants.CacheOwnerKey,user);
                 int code = _otpService.GenerateCode(phoneNumber: userLoginModel.PhoneNumber);
                 return code;
 
@@ -131,7 +131,7 @@ namespace LMS.Service.Api
             try
             {
                 await _otpService.CheckCodeExpired(otpModel.Code);
-                var code = (int)_otpService.VerifyRegister(otpModel);
+                var code = (int)_otpService.VerifyLogin(otpModel);
                 if (code != otpModel.Code)
                     throw new Exception("The code is not valid");
 
@@ -199,6 +199,30 @@ namespace LMS.Service.Api
         private async Task IsOwnerRole(User user)
         {
             await _userRepository.CheckRoleOwner(user.Role);
+        }
+
+        private void CheckUsernameCache(string username)
+        {
+            var entity = _memoryCacheService.GetEntity(Constants.CacheOwnerKey);
+           
+
+            var user =(User) entity;
+
+           if(username ==  user?.Username)
+                throw new Exception($"The username with {username} is already exist");
+        }
+
+
+        private void CheckPhonenumberCache(string phoneNumber)
+        {
+            var entity = _memoryCacheService.GetEntity(Constants.CacheOwnerKey);
+          
+
+            var user = (User)entity;
+
+
+            if(phoneNumber == user?.PhoneNumber)
+                throw new Exception($"The phonenumber with {phoneNumber} is already exist");
         }
     }
 }
