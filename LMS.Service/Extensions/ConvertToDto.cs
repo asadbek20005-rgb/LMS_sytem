@@ -75,7 +75,7 @@ namespace LMS.Service.Extensions
             var contentDtos = new List<ContentDto>();
             foreach (var content in contents)
             {
-                content.Adapt(content.ParseToDto());
+                contentDtos.Add(content.ParseToDto());
             }
             return contentDtos;
         }

@@ -6,7 +6,7 @@
         public required string Title { get; set; }
         public string? Description { get; set; }
         public Guid CourseId { get; set; }
-        public Course? Course { get; set; }
-        public List<Content>? Contents { get; set; }
+        public virtual Course? Course { get; set; }
+        public virtual List<Content>? Contents { get; set; }
     }
 }

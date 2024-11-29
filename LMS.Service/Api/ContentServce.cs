@@ -5,31 +5,17 @@ using LMS.Data.Repositories.Interfaces;
 using LMS.Service.Extensions;
 using LMS.Service.Helpers;
 using LMS.Service.MinioStorage;
+using Microsoft.AspNetCore.Mvc;
 
 namespace LMS.Service.Api
 {
-    public class ContentServce(IContentRepository contentRepository,MinioStorageService minioStorageService)
+    public class ContentServce(IContentRepository contentRepository, MinioStorageService minioStorageService)
     {
         private readonly IContentRepository _contentRepository = contentRepository;
         public async Task<ContentDto> AddOrUpdateContent(Guid userId, Guid courseId, int lessonId, AddOrUpdateContentModel addOrUpdateContentModel)
         {
             try
             {
-                //var vedioFile = addOrUpdateContentModel.FormFile;
-                //var contentType = vedioFile.ContentType;
-                //long size = vedioFile.Length;
-                //var fileName = Guid.NewGuid().ToString();
-                //MemoryStream memoryStream = new MemoryStream();
-                //await vedioFile.CopyToAsync(memoryStream);
-                //await _minioStorageService.UploadFileAsync(fileName, memoryStream, contentType);
-
-                //var newContent = new Content
-                //{
-                //    Name = fileName              
-                //};
-
-                //await _contentRepository.AddOrUpdateContent(newContent);
-                //return newContent.ParseToDto();
 
                 var videoFile = addOrUpdateContentModel.FormFile;
                 ContentHelper.IsVideo(videoFile);
@@ -40,7 +26,7 @@ namespace LMS.Service.Api
                     await System.IO.File.WriteAllBytesAsync(filePath, data);
                 var newContent = new Content
                 {
-                    Name = videoFile.Name,
+                    Name = videoFile.FileName,
                     LessonId = lessonId,
                 };
                 await _contentRepository.AddOrUpdateContent(newContent);
@@ -80,38 +66,7 @@ namespace LMS.Service.Api
             }
         }
 
-        //public static async Task<byte[]> GetBytes(IFormFile file)
-        //{
 
-        //    var ms = new MemoryStream();
-        //    await file.CopyToAsync(ms);
-        //    var data = ms.ToArray();
-        //    var checkData = data is null || data.Length == 0;
-        //    if (checkData)
-        //        return null;
-        //    return data;
-        //}
-
-
-        //public static void IsFile(IFormFile file)
-        //{
-        //    var check = file.ContentType != Constants.PngType ||
-        //        file.ContentType != Constants.JpgType;
-
-        //    if (!check)
-        //        throw new PhotoNotFound();
-        //}
-        //public async Task<byte[]> AddOrUpdatePhoto(Guid userId, IFormFile file)
-        //{
-
-        //    var user = await _unitOfWork.UserRepository.GetUserById(userId);
-        //    StaticHelper.IsFile(file);
-        //    var data = await StaticHelper.GetBytes(file);
-        //    user.PhotoData = data;
-        //    await _unitOfWork.UserRepository.UpdateUser(user);
-        //    await Set();
-        //    return data;
-        //}
         public async Task<List<ContentDto>> GetAllContents(Guid userId, Guid courseId, int lessonId)
         {
             try
@@ -125,19 +80,44 @@ namespace LMS.Service.Api
             }
         }
 
-        public async Task<ContentDto> GetContent(Guid userId, Guid courseId, int lessonId, int contentId, string filename)
+        public async Task<Stream> GetContent(Guid userId, Guid courseId, int lessonId, int contentId)
         {
             try
             {
                 var content = await _contentRepository.GetContentById(userId, courseId, lessonId, contentId);
-                return content.ParseToDto();
 
+                var fileName = content?.Name;
+
+                if (string.IsNullOrEmpty(fileName))
+                {
+                    throw new Exception("Fayl nomi mavjud emas.");
+                }
+
+                var folderPath = Path.Combine("wwwroot", "Videos");
+
+                var filePath = Path.Combine(folderPath, fileName);
+
+                if (System.IO.File.Exists(filePath))
+                {
+                    var stream = new FileStream(filePath,FileMode.Open, FileAccess.Read);
+
+                    return stream;
+
+                }
+
+
+                
+                else
+                {
+                    throw new Exception("Fayl topilmadi.");
+                }
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
+
 
 
     }

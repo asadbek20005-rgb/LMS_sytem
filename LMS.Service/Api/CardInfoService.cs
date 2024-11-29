@@ -4,6 +4,7 @@ using LMS.Data.Entities;
 using LMS.Data.Exceptions.CardInfo;
 using LMS.Data.Repositories.Interfaces;
 using LMS.Service.Extensions;
+using Microsoft.AspNetCore.Identity;
 //BCrypt.Net.BCrypt.HashPassword(password),
 
 namespace LMS.Service.Api
@@ -21,12 +22,14 @@ namespace LMS.Service.Api
                 var isValidateCard = IsValidateCard(createCardInfoModel.CardNumber, createCardInfoModel.CVV, createCardInfoModel.CardHolderNumber);
                 if (isValidateCard)
                 {
+                    var hasher = new PasswordHasher<CardInfo>();
                     var newCardInfo = new CardInfo
                     {
-                        CardHolderNumber = createCardInfoModel.CardHolderNumber,
-                        CardNumber = createCardInfoModel.CardNumber,
-                        CVVHash = createCardInfoModel.CVV,
+                        CardHolderNumber = hasher.HashPassword(null, createCardInfoModel.CardHolderNumber), 
+                        CardNumber = hasher.HashPassword(null, createCardInfoModel.CardNumber),           
+                        CVVHash = hasher.HashPassword(null, createCardInfoModel.CVV),
                     };
+
 
                     await _cardInfoRepository.CreateCardInfo(newCardInfo);
                     return newCardInfo.ParseToDto();

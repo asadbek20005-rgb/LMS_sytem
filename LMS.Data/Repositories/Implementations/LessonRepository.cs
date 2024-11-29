@@ -31,11 +31,15 @@ namespace LMS.Data.Repositories.Implementations
         {
             var userCourse = await _context.User_Courses
                 .AsNoTracking()
-    .Include(uc => uc.Course)
-        .ThenInclude(c => c.Lessons) // Lessons obyektini yuklash
-    .Where(x => x.UserId == userId && x.CourseId == courseId)
-    .AsNoTracking()
-    .FirstOrDefaultAsync() ?? throw new Exceptions.User_Course.User_Course_NotFoundException();
+                .Include(uc => uc.Course)
+                    .ThenInclude(c => c.Lessons)
+                .Where(x => x.UserId == userId && x.CourseId == courseId)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+            if (userCourse == null)
+            {
+                throw new Exceptions.User_Course.User_Course_NotFoundException();
+            }
 
             var userCourseLessons = userCourse.Course?.Lessons?.ToList() ?? throw new Exceptions.Lesson.LessonNotFoundException();
             return userCourseLessons;
@@ -45,15 +49,26 @@ namespace LMS.Data.Repositories.Implementations
         public async Task<Lesson> GetUserCourseLessonById(Guid userId, Guid courseId, int lessonId)
         {
             var userCourse = await _context.User_Courses
-                .AsNoTracking()
-                .Where(x => x.UserId == userId && x.CourseId == courseId)
                 .Include(uc => uc.Course)
-                .ThenInclude(uc => uc.Lessons)
-                .AsNoTracking()
-                .FirstOrDefaultAsync() ?? throw new LessonNotFoundException();
-            var userCourseLesson = (userCourse.Course?.Lessons?.SingleOrDefault(x => x.Id == lessonId)) ?? throw new LessonNotFoundException();
+                .ThenInclude(c => c.Lessons) 
+                .ThenInclude(c => c.Contents)
+                .Where(uc => uc.UserId == userId && uc.CourseId == courseId)
+                .FirstOrDefaultAsync();
+
+            if (userCourse is null)
+                throw new Exception("User_Course not found.");
+
+            var userCourseLesson = userCourse.Course?.Lessons?
+                .FirstOrDefault(l => l.Id == lessonId);
+
+          
+           
+            if (userCourseLesson is null)
+                throw new LessonNotFoundException();
+
             return userCourseLesson;
         }
+
 
         public async Task UpdateUserCourseLesson(Lesson lesson)
         {

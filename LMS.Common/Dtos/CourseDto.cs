@@ -3,10 +3,10 @@
     public class CourseDto
     {
         public Guid Id { get; set; }
-        public required string Title { get; set; }
+        public  string Title { get; set; }
         public string? Description { get; set; }
-        public required decimal Price { get; set; }
-        public required string Category { get; set; }
+        public  decimal Price { get; set; }
+        public  string Category { get; set; }
         public DateTime CreatedDate { get; set; }
 
         public List<LessonDto>? Lessons { get; set; }

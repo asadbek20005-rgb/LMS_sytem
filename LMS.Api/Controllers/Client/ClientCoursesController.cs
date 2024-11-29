@@ -1,5 +1,6 @@
 ﻿using LMS.Common.Constants;
 using LMS.Service.Api;
+using LMS.Service.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,25 +8,31 @@ namespace LMS.Api.Controllers.Client
 {
     [Route("api/clients/clientId/[controller]")]
     [ApiController]
-    public class ClientCoursesController(CourseService courseService) : ControllerBase
+    public class ClientCoursesController(CourseService courseService, UserHelper userHelper) : ControllerBase
     {
         private readonly CourseService _courseService = courseService;
+        private readonly UserHelper _userHelper = userHelper;
 
         [HttpGet()]
         [Authorize(Roles = Constants.Client)]
-        public async Task<IActionResult> GetAllCourses()
+        public async Task<IActionResult> GetAllClientCourses()
         {
-            var dtos = await _courseService.GetAllCourses();
+            var clientId = _userHelper.GetUserId();
+            var dtos = await _courseService.GetAllClientCourses(clientId);
             return Ok(dtos);
         }
 
-        [HttpGet("sort")]
-        [Authorize(Roles = Constants.Client)]
-        public async Task<IActionResult> SortBy([FromQuery] string? category = null, [FromQuery] string? title = null, [FromQuery] decimal? price = null)
+        [HttpGet("{courseId:guid}")]
+        [Authorize(Roles =Constants.Client)]
+        public async Task<IActionResult> GetClientCourseById(Guid courseId)
         {
-            var courses = await _courseService.SortBy(category, title, price);
-            return Ok(courses);
+            var userId = _userHelper.GetUserId();
+            var course = await _courseService.GetUserCourseById(userId, courseId);
+            return Ok(course);
         }
+
+
+      
 
     }
 }

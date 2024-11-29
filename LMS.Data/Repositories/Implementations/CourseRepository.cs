@@ -1,6 +1,7 @@
 ﻿using LMS.Data.Context;
 using LMS.Data.Entities;
 using LMS.Data.Exceptions.Course;
+using LMS.Data.Exceptions.User_Course;
 using LMS.Data.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -30,33 +31,81 @@ namespace LMS.Data.Repositories.Implementations
             return await _context.Courses.AsNoTracking().ToListAsync();
         }
 
+        public async Task<List<Course>> GetAllPayedUserCourses(Guid userId)
+        {
+
+            var userCourses = await _context.User_Courses
+                .Where(uc => uc.UserId == userId == uc.IsPayed == true)
+                .Include(uc => uc.Course)  
+                .ToListAsync();
+
+            
+            if (userCourses == null)
+            {
+                throw new User_Course_NotFoundException();
+            }
+
+            
+            var courses = userCourses.Select(uc => uc.Course).ToList();
+            
+            return courses;
+        }
+
+
         public async Task<List<Course>> GetAllUserCourses(Guid userId)
         {
             var userCourse = await _context.User_Courses
                 .AsNoTracking()
                 .Include(x => x.Course)
-                .Where(x => x.UserId == userId)
-                .AsNoTracking()
+                .Where(x => x.UserId == userId && x.IsOwner == true)
                 .ToListAsync();
 
             var courses = userCourse.Select(uc => uc.Course).ToList();
-            if (courses.Count == 0 || courses is null)
+            if ( courses is null)
                 throw new CourseNotFoundException();
             return courses!;
         }
 
+        public async Task<Course> GetCourseById(Guid courseId)
+        {
+            var userCourse = await _context.User_Courses
+                .AsNoTracking()  
+                .Include(uc => uc.Course) 
+                .FirstOrDefaultAsync(uc => uc.CourseId == courseId);  
+
+            if (userCourse == null)
+                throw new User_Course_NotFoundException();
+
+            var course = userCourse.Course;
+
+            if (course == null)
+                throw new CourseNotFoundException();
+
+            return course;
+        }
+
+        public Task<Course> GetPayedUserCourse(Guid userId, Guid courseId)
+        {
+            throw new NotImplementedException();
+        }
+
+        
+
         public async Task<Course> GetUserCourseById(Guid userId, Guid courseId)
         {
-            var userCourse = _context.User_Courses
+            var course = await _context.User_Courses
+                .Where(uc => uc.UserId == userId && uc.CourseId == courseId)
                 .AsNoTracking()
-                .Include(x => x.Course);          
-                var res = await userCourse.Where(x => x.UserId == userId && x.CourseId == courseId)
+                .Include(uc => uc.Course)
                 .AsNoTracking()
-                  .Select(uc => uc.Course)
-                  .AsNoTracking()
-                  .FirstOrDefaultAsync() ?? throw new CourseNotFoundException();
-                return res;
+                .Select(uc => uc.Course)
+                .FirstOrDefaultAsync();
+
+            return course is null ? throw new CourseNotFoundException() : course;
         }
+
+        
+
 
         public async Task<List<Course>> SeachUserCourseByCategory(string category)
         {

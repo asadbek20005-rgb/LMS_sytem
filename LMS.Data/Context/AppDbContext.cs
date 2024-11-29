@@ -7,15 +7,15 @@ namespace LMS.Data.Context
 {
     public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
     {
-        public DbSet<User>? Users { get; set; }
-        public DbSet<Course>? Courses { get; set; }
-        public DbSet<User_Course>? User_Courses { get; set; }
-        public DbSet<Lesson>? Lessons { get; set; }
-        public DbSet<Content>? Contents { get; set; }
-        public DbSet<User_Course_Payment>? User_Course_Payments { get; set; }
-        public DbSet<User_Course_Report>? User_Course_Reports { get; set; }
-        public DbSet<CardInfo>? CardInfos { get; set; }
-        public DbSet<OTP>? OTP { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<User_Course> User_Courses { get; set; }
+        public DbSet<Lesson> Lessons { get; set; }
+        public DbSet<Content> Contents { get; set; }
+        public DbSet<User_Course_Payment> User_Course_Payments { get; set; }
+        public DbSet<User_Course_Report> User_Course_Reports { get; set; }
+        public DbSet<CardInfo> CardInfos { get; set; }
+        public DbSet<OTP> OTP { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

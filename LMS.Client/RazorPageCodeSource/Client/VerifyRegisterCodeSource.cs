@@ -16,7 +16,7 @@ namespace LMS.Client.RazorPageCodeSource.Client
         {
             var statusCode = await ClientIntegration.VerifyRegister(OtpModel);
             if (statusCode == System.Net.HttpStatusCode.OK)
-                NavigationManager.NavigateTo("/pages/account/client/login");
+                NavigationManager.NavigateTo("/pages/course");
 
         }
     }

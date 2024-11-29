@@ -2,9 +2,9 @@
 {
     public class CreateCardInfoModel
     {
-        public required string CardNumber { get; set; }
-        public required string CardHolderNumber { get; set; }
-        public required string CVV { get; set; }
+        public  string CardNumber { get; set; }
+        public  string CardHolderNumber { get; set; }
+        public  string CVV { get; set; }
 
     }
 }

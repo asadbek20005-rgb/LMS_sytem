@@ -65,7 +65,7 @@ namespace LMS.Service.Api
                     UserId = userId,
                     CourseId = newCourse.Id,
                     Course = newCourse,
-                    IsPayed = true,
+                    IsPayed = false,
                     IsOwner = true,
                     IsFree = false
                 } ?? throw new User_Course_PaymentNotFoundException();
@@ -118,12 +118,12 @@ namespace LMS.Service.Api
 
         }
 
-        public async Task<List<CourseDto>> GetAllCourses()
+        public async Task<List<CourseDto>> GetAllClientCourses(Guid userId)
         {
             try
             {
 
-                var allCourses = await _courseRepository.GetAllCourses();
+                var allCourses = await _courseRepository.GetAllPayedUserCourses(userId);
                 return allCourses.ParseToDtos();
             }
             catch (Exception ex)
@@ -192,6 +192,18 @@ namespace LMS.Service.Api
                 return userCourse.ParseToDto();
             }
             catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<CourseDto> GetCourseById(Guid courseId)
+        {
+            try
+            {
+                var course = await _courseRepository.GetCourseById(courseId);
+                return course.ParseToDto();
+            }catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }

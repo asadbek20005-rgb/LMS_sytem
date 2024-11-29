@@ -21,7 +21,7 @@ namespace LMS.Data.Entities
         public DateTime CreatedDate { get; set; }
         public bool IsBlocked { get; set; }
 
-        public List<User_Course>? Courses { get; set; }
-        public List<User_Course_Payment>? Payments { get; set; }
+        public virtual List<User_Course>? Courses { get; set; }
+        public virtual List<User_Course_Payment>? Payments { get; set; }
     }
 }

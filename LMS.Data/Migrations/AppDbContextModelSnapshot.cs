@@ -190,13 +190,13 @@ namespace LMS.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("452e48dc-dd4b-4154-9f2f-1348355ee973"),
+                            Id = new Guid("076426af-7a8f-4049-a373-38777eeaecb6"),
                             Code = 0,
                             CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "Asadbek",
                             IsBlocked = false,
                             LastName = "Shermatov",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEhAX3aKA+QykspgZKN7op4iwiGP/8ogw94PnIGn0Nh0tARMHCnAkxTiIDrKP8Ancg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFlfMoQburgqSiFfohs2/H2WqBRfJKuRQVX8mx6c6kZTYbI1K8120VWf43Wt7ldjSw==",
                             PhoneNumber = "+998945631282",
                             Role = "admin",
                             Username = "spawn"

@@ -67,8 +67,19 @@ namespace LMS.Api.Controllers.Owner
         }
 
 
+        [HttpGet("{courseId:guid}")]
+        [Authorize(Roles =Constants.Owner)]
+        public async Task<IActionResult> GetOwnerCourseById(Guid courseId)
+        {
+            var userId = _userHelper.GetUserId();
+            var course =  await _courseService.GetUserCourseById(userId,courseId);
+            return Ok(course);
+        }
+
+
+
         [HttpPut("set-price")]
-        [Authorize(Roles = Constants.Owner)]
+        //[Authorize(Roles = Constants.Owner)]
         public async Task<IActionResult> UpdateCoursePrice(Guid courseId, UpdateCourseModel updateCourseModel)
         {
             try

@@ -12,7 +12,7 @@
                 <p class="course-category">Category: <b>@course.Category</b></p>
                 <p class="course-price"><b>@course.Price</b> $</p>
                 <p class="course-date">Created: @course.CreatedDate.ToString("MMMM dd, yyyy")</p>
-                <button class="buy-button">Buy Now</button>
+                <button class="buy-button" @onclick="() => SelectedCourse(course.Id)">Buy Now</button>
             </div>
         </div>
     }

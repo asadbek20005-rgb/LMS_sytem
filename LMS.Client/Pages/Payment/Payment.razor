@@ -1,0 +1,128 @@
+﻿@page "/payment/{courseId:guid}"
+@inherits RazorPageCodeSource.Payment.PaymentCodeSource
+
+<!-- Custom Styles -->
+<style>
+    .payment-form {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .payment-form h4 {
+        color: #007bff;
+    }
+
+    .payment-form .form-label {
+        font-weight: bold;
+    }
+
+    .payment-form .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .payment-form .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+    .payment-form input,
+    .payment-form button {
+        border-radius: 5px;
+    }
+
+    .form-divider {
+        margin: 20px 0;
+        border-top: 2px solid #007bff;
+    }
+    
+    .payment-header {
+        background-color: #007bff;
+        color: white;
+        text-align: center;
+        padding: 15px;
+        border-radius: 8px 8px 0 0;
+    }
+    
+    .payment-card {
+        border-radius: 8px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .payment-footer {
+        text-align: center;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="payment-card">
+                <div class="payment-header">
+                    <h4>Complete Your Payment</h4>
+                    <p class="lead">Fill in the details to process your payment</p>
+                </div>
+                <div class="payment-form">
+                    <form method="post" action="/Buy">
+                        <!-- Course Details -->
+                        <div class="mb-4">
+                            <label for="amount" class="form-label">Amount</label>
+                            <input type="number" @bind="paymentModel.Amount" id="amount" class="form-control" placeholder="Enter Amount" required />
+                        </div>
+
+                        <!-- Divider -->
+                        <hr class="form-divider" />
+
+                        <!-- Card Information -->
+                        <h5 class="text-primary mb-3">Card Information</h5>
+
+                        <div class="mb-3">
+                            <label for="cardNumber" class="form-label">Card Number</label>
+                            <input type="text" @bind="model.CardNumber" id="cardNumber" class="form-control" placeholder="Enter Card Number" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="cardHolder" class="form-label">Card Holder</label>
+                            <input type="text" @bind="model.CardHolderNumber" id="cardHolder" class="form-control" placeholder="Enter Card Holder Name" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="cvv" class="form-label">CVV</label>
+                            <input type="text" @bind="model.CVV" id="cvv" class="form-control" placeholder="Enter CVV" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="category" class="form-label"><b>Status</b></label>
+                            <select id="category" class="form-select" @bind="@paymentModel.Status" required>
+                                <option value="">Payed</option>
+                                <option value="Backend">Payed2</option>
+                                <option value="Fullstack">Fullstack</option>
+                                <option value="Frontend">Frontend</option>
+                                <option value="DevOps">DevOps</option>
+                                <option value="Machine Learning">Machine Learning</option>
+                            </select>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid">
+                            <button type="button" class="btn btn-primary btn-lg" @onclick="Pay">Submit Payment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Payment Footer (Optional) -->
+            <div class="payment-footer">
+                <p>Powered by Your Company</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

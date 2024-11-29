@@ -12,8 +12,8 @@ namespace LMS.Data.Entities
         public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
 
 
-        public List<User_Course>? Users { get; set; }
-        public List<User_Course_Payment>? Payments { get; set; }
-        public List<Lesson>? Lessons { get; set; }
+        public virtual List<User_Course>? Users { get; set; }
+        public virtual List<User_Course_Payment>? Payments { get; set; }
+        public virtual List<Lesson>? Lessons { get; set; }
     }
 }

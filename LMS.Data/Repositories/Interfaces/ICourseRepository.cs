@@ -12,5 +12,8 @@ namespace LMS.Data.Repositories.Interfaces
         Task<List<Course>> SeachUserCourseByCategory(string category);
         Task UpdateCourse(Course course);
         Task CheckCourseFoTitle(string title);  
+        Task<Course> GetCourseById(Guid courseId);
+        Task<List<Course>> GetAllPayedUserCourses(Guid userId);
+        Task<Course> GetPayedUserCourse(Guid userId, Guid courseId);
     }
 }
