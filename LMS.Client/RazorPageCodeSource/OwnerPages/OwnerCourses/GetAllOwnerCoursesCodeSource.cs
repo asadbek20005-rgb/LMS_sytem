@@ -3,12 +3,12 @@ using LMS.Common.Dtos;
 using Microsoft.AspNetCore.Components;
 using System.Net.Http;
 
-namespace LMS.Client.RazorPageCodeSource.Course
+namespace LMS.Client.RazorPageCodeSource.OwnerPages.OwnerCourses
 {
     public class GetAllOwnerCoursesCodeSource : ComponentBase
     {
         [Inject] private ICourseIntegration CourseIntegration { get; set; }
-
+        [Inject] private NavigationManager NavigationManager { get; set; }
         protected List<CourseDto> Courses { get; set; } = new List<CourseDto>();
 
         protected override async Task OnInitializedAsync()
@@ -20,7 +20,7 @@ namespace LMS.Client.RazorPageCodeSource.Course
         {
             var (statusCode, dtos) = await CourseIntegration.GetAllOwnerCourses();
 
-            if(statusCode == System.Net.HttpStatusCode.OK)
+            if (statusCode == System.Net.HttpStatusCode.OK)
             {
                 return dtos;
             }
@@ -28,7 +28,9 @@ namespace LMS.Client.RazorPageCodeSource.Course
             return null;
         }
 
-
-        
+        public void SelectedCourse(Guid courseId)
+        {
+            NavigationManager.NavigateTo($"/owner-lessons/{courseId}");
+        }
     }
 }

@@ -152,9 +152,6 @@ namespace LMS.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("Code")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -190,13 +187,12 @@ namespace LMS.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("076426af-7a8f-4049-a373-38777eeaecb6"),
-                            Code = 0,
-                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Id = new Guid("889ccd90-3980-4727-ab9f-69bf1df516bd"),
+                            CreatedDate = new DateTime(2024, 12, 2, 9, 3, 7, 584, DateTimeKind.Utc).AddTicks(1825),
                             FirstName = "Asadbek",
                             IsBlocked = false,
                             LastName = "Shermatov",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFlfMoQburgqSiFfohs2/H2WqBRfJKuRQVX8mx6c6kZTYbI1K8120VWf43Wt7ldjSw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAECoDZ/4NAq4O1ZGz+ddwbzUXQFAdComYuPw1aW4TDEeLk+OT6ORxyDF1Q2xAI+vuCA==",
                             PhoneNumber = "+998945631282",
                             Role = "admin",
                             Username = "spawn"

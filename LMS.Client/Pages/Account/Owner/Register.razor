@@ -1,5 +1,5 @@
 ﻿@page "/pages/account/owner/register"
-@inherits RazorPageCodeSource.Owner.RegisterCodeSource
+@inherits RazorPageCodeSource.Accounts.Owner.RegisterCodeSource
 <div class="container">
     <h1>Register</h1>
     <p>Please fill in this form to create an account.</p>
@@ -19,7 +19,7 @@
 
 
     <label><b>Phone Number</b></label>
-    <input type="text" @bind="@model.PhoneNumber" placeholder="Last name" name="last name"
+    <input type="text" @bind="@model.PhoneNumber" placeholder="Enter your phone number" name="last name"
            required>
 
     <label for="psw"><b>Password</b></label>

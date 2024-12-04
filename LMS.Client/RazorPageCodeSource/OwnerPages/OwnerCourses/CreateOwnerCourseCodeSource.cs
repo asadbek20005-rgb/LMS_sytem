@@ -2,12 +2,12 @@
 using LMS.Common.Models;
 using Microsoft.AspNetCore.Components;
 
-namespace LMS.Client.RazorPageCodeSource.Course
+namespace LMS.Client.RazorPageCodeSource.OwnerPages.OwnerCourses
 {
     public class CreateOwnerCourseCodeSource : ComponentBase
     {
         [Inject] private ICourseIntegration CourseIntegration { get; set; }
-        [Inject] private NavigationManager NavigationManager { get; set; }  
+        [Inject] private NavigationManager NavigationManager { get; set; }
         protected CreateCourseModel Model { get; set; } = new();
 
 

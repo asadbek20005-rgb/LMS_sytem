@@ -1,12 +1,12 @@
 ﻿@page "/pages/account/client/verify-register/{code}"
-@inherits RazorPageCodeSource.Client.VerifyRegisterCodeSource
+@inherits RazorPageCodeSource.Accounts.Client.VerifyRegisterCodeSource
 <div class="container">
     <h1>Verify Register</h1>
     <p>@Code</p>
     <hr>
 
     <label><b>Phone Number</b></label>
-    <input type="text" @bind="@OtpModel.PhoneNumber" placeholder="Last name" name="last name"
+    <input type="text" @bind="@OtpModel.PhoneNumber" placeholder="Enter your phone number" name="last name"
            required>
 
     <label for="psw-repeat"><b>Code</b></label>

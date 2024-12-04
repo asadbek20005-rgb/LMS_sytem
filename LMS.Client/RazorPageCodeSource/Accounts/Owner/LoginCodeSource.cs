@@ -3,7 +3,7 @@ using LMS.Client.Integrations.Owner;
 using LMS.Common.Models.AccountModels;
 using Microsoft.AspNetCore.Components;
 
-namespace LMS.Client.RazorPageCodeSource.Owner
+namespace LMS.Client.RazorPageCodeSource.Accounts.Owner
 {
     public class LoginCodeSource : ComponentBase
     {

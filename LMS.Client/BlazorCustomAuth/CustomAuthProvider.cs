@@ -5,18 +5,19 @@ using System.Security.Claims;
 
 namespace LMS.Client.BlazorCustomAuth
 {
-    public class CustomAuthProvider(LocalStorageService localStorageService, JwtSecurityTokenHandler jwtSecurityTokenHandler) : Microsoft.AspNetCore.Components.Authorization.AuthenticationStateProvider
+    public class CustomAuthProvider(LocalStorageService localStorageService, JwtSecurityTokenHandler jwtSecurityTokenHandler)
+        : Microsoft.AspNetCore.Components.Authorization.AuthenticationStateProvider
     {
         private readonly LocalStorageService _localStorageService = localStorageService;
         private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler = jwtSecurityTokenHandler;
+
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             var token = await _localStorageService.GetToken();
 
-            if(string.IsNullOrWhiteSpace(token))
+            if (string.IsNullOrWhiteSpace(token) || !_jwtSecurityTokenHandler.CanReadToken(token))
             {
-                var claimPrincipal = new ClaimsPrincipal(new ClaimsIdentity());
-                return new AuthenticationState(claimPrincipal); 
+                return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
             }
 
             var claims = ParseClaimsFromToken(token);
@@ -26,28 +27,23 @@ namespace LMS.Client.BlazorCustomAuth
             return new AuthenticationState(principal);
         }
 
-
         private List<Claim> ParseClaimsFromToken(string token)
         {
-            var jwtSecurityToken = _jwtSecurityTokenHandler.ReadJwtToken(token);
-            var userId = jwtSecurityToken.Claims
-                     .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value;
-            var role = jwtSecurityToken.Claims
-                    .FirstOrDefault(c =>
-                    c.Type == ClaimTypes.Role)!.Value;
-
-            var mobileNumber = jwtSecurityToken.Claims
-                     .FirstOrDefault(c =>
-                  c.Type == ClaimTypes.MobilePhone
-                     )!.Value;
-
-            var claims = new List<Claim>()
+            if (!_jwtSecurityTokenHandler.CanReadToken(token))
             {
-               new Claim(ClaimTypes.NameIdentifier, userId),
-               new Claim(ClaimTypes.MobilePhone, mobileNumber),
-               new Claim(ClaimTypes.Role, role),
+                throw new ArgumentException("JWT is not well-formed.");
+            }
 
-            };
+            var jwtSecurityToken = _jwtSecurityTokenHandler.ReadJwtToken(token);
+            var claims = new List<Claim>();
+
+            var userId = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var role = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            var mobileNumber = jwtSecurityToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.MobilePhone)?.Value;
+
+            if (!string.IsNullOrWhiteSpace(userId)) claims.Add(new Claim(ClaimTypes.NameIdentifier, userId));
+            if (!string.IsNullOrWhiteSpace(role)) claims.Add(new Claim(ClaimTypes.Role, role));
+            if (!string.IsNullOrWhiteSpace(mobileNumber)) claims.Add(new Claim(ClaimTypes.MobilePhone, mobileNumber));
 
             return claims;
         }

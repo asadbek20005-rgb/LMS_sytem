@@ -27,8 +27,8 @@ namespace LMS.Api.Controllers.Client
         public async Task<IActionResult> GetLessonContentById(Guid courseId, int lessonId, int contentId)
         {
             var userId = _userHelper.GetUserId();
-            var content = await _contentServce.GetContent(userId,courseId, lessonId, contentId);    
-            return Ok(content);
+            var (stream, fileName, contentType) = await _contentServce.GetContent(userId,courseId, lessonId, contentId);
+            return File(stream, fileName, contentType);
         }
     }
 }

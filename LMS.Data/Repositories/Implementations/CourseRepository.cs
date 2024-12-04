@@ -35,7 +35,7 @@ namespace LMS.Data.Repositories.Implementations
         {
 
             var userCourses = await _context.User_Courses
-                .Where(uc => uc.UserId == userId == uc.IsPayed == true)
+                .Where(uc => uc.UserId == userId && uc.IsPayed == true)
                 .Include(uc => uc.Course)  
                 .ToListAsync();
 

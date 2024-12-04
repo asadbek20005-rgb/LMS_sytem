@@ -1,8 +1,24 @@
 Project kamchiliklar
 
-1. Code Generate qilingandan kegin expired bolishi kerak
-2. Verfy da Code ni tekshirish kerak bir biriga tengligini
-3. Login actionlarda role larini tekshirish kerak
-4. Client role da Login da faqat phone number kiritish kerak password shart emas
-5. Admin role ga Login va Verify Login action yozish
-6. Get All Courses ni Adminga yozish
+Api:
+1-Minio strage ni ishlatish
+2-RabbitMQ ni ham ishlatish payment da
+3-User entitydagi Code prop ni delete qilish
+
+
+UI:
+
+1-Register, Login, Logout larini yaxshilash
+2-Agar token storage da yoq bo'lsa User Login qilishini bildirish
+3-Phone number inputni type ni to'g'irlash
+4-Owner verify loginni yaxshilash
+5-Owner verify login qilganida GetAllOwnerCourses page ga yuborish
+6-Course Categoriyasini yaxshilash
+7-Create Course page ni yaxshilash
+8-Get all owner courses page ni yaxshilash
+9-Create Owner Lesson yaratish
+10-Get all owner lessons
+11-Get Owner lesson
+12-Create Owner Content
+13-Get all owner contents
+14-get owner content

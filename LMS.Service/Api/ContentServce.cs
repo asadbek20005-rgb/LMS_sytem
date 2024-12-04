@@ -5,7 +5,6 @@ using LMS.Data.Repositories.Interfaces;
 using LMS.Service.Extensions;
 using LMS.Service.Helpers;
 using LMS.Service.MinioStorage;
-using Microsoft.AspNetCore.Mvc;
 
 namespace LMS.Service.Api
 {
@@ -80,7 +79,7 @@ namespace LMS.Service.Api
             }
         }
 
-        public async Task<Stream> GetContent(Guid userId, Guid courseId, int lessonId, int contentId)
+        public async Task<(Stream stream, string fileName, string contentType)> GetContent(Guid userId, Guid courseId, int lessonId, int contentId)
         {
             try
             {
@@ -99,14 +98,17 @@ namespace LMS.Service.Api
 
                 if (System.IO.File.Exists(filePath))
                 {
-                    var stream = new FileStream(filePath,FileMode.Open, FileAccess.Read);
-
-                    return stream;
-
+                    var ms = new MemoryStream();
+                    var fileStream = new FileStream(filePath,FileMode.Open,FileAccess.Read);
+                    await fileStream.CopyToAsync(ms);   
+                    ms.Position = 0;
+                    var contentType = "application/octet-stream";
+                    if (Path.GetExtension(fileName)?.ToLower() == ".mp4")
+                    {
+                        contentType = "video/mp4";
+                    }
+                    return (ms, contentType, fileName);
                 }
-
-
-                
                 else
                 {
                     throw new Exception("Fayl topilmadi.");

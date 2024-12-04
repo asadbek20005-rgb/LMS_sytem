@@ -1,6 +1,10 @@
 ﻿@page "/payment/{courseId:guid}"
-@inherits RazorPageCodeSource.Payment.PaymentCodeSource
+@inherits RazorPageCodeSource.ClientPages.Payment.PaymentCodeSource
 
+
+@using LMS.Common.Constants
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = Constants.Client)]
 <!-- Custom Styles -->
 <style>
     .payment-form {

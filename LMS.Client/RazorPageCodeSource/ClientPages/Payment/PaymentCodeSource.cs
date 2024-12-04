@@ -4,11 +4,11 @@ using LMS.Common.Models;
 using Microsoft.AspNetCore.Components;
 using System.Net;
 
-namespace LMS.Client.RazorPageCodeSource.Payment
+namespace LMS.Client.RazorPageCodeSource.ClientPages.Payment
 {
     public class PaymentCodeSource : ComponentBase
     {
-        [Inject] private IPaymentIntegration PaymentIntegration {  get; set; }
+        [Inject] private IPaymentIntegration PaymentIntegration { get; set; }
         [Inject] private NavigationManager NavigationManager { get; set; }
         protected CreateUser_Course_Payment paymentModel { get; set; } = new();
         protected CourseDto courseDto { get; set; } = new();

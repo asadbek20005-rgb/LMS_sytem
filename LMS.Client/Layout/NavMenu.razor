@@ -1,4 +1,7 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using LMS.Common.Constants
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">LMS.Client</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -9,26 +12,60 @@
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/pages/account/client/register">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Client
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/pages/account/owner/register">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Owner
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/pages/course">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Courses
-            </NavLink>
-        </div>
+        @if(role is Constants.Client && isAuthorized){
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/pages/course">
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Courses
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/clientCourse">
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Client Courses
+                </NavLink>
+            </div>
+        }else if (role is Constants.Owner && isAuthorized)
+        {
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/pages/course">
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Courses
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/pages/course/owner">
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Owner Courses
+                </NavLink>
+            </div>
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/pages/course/create">
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Create Course
+                </NavLink>
+            </div>
+        }
     </nav>
 </div>
 
 @code {
     private bool collapseNavMenu = true;
+    private string role { get; set; }
+    private bool isAuthorized { get; set; }
+    [Inject] AuthenticationStateProvider authenticationStateProvider{ get; set; }
+    [Inject] LocalStorage.LocalStorageService localStorageService { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        var token = await localStorageService.GetToken();
+        isAuthorized = !string.IsNullOrEmpty(token);
+        if(isAuthorized){
+            var stateProvider = (BlazorCustomAuth.CustomAuthProvider)authenticationStateProvider;
+            var state = await stateProvider.GetAuthenticationStateAsync();
+            role = state.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
+        }
+    }
+
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 

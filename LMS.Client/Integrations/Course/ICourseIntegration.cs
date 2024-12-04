@@ -10,6 +10,6 @@ namespace LMS.Client.Integrations.Course
         Task<Tuple<HttpStatusCode, List<CourseDto>>> GetAllCourses();
         Task<HttpStatusCode> CreateOwnerCourse(CreateCourseModel createCourseModel);
         Task<Tuple<HttpStatusCode, List<CourseDto>>> GetAllOwnerCourses();
-        
+        Task<(HttpStatusCode, List<CourseDto>)> GetAllClientCourses();
     }
 }

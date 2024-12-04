@@ -1,0 +1,11 @@
+﻿@page "/see-vedio-owner/{courseId:guid}/{lessonId:int}/{contentId:int}"
+
+
+@using LMS.Common.Constants
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = Constants.Owner)]
+<h3>SeeVideo</h3>
+
+@code {
+
+}

@@ -1,4 +1,6 @@
-﻿@inherits LayoutComponentBase
+﻿@using System.Security.Claims
+@using LMS.Common.Constants
+@inherits LayoutComponentBase
 <div class="page">
     <div class="sidebar">
         <NavMenu />
@@ -6,7 +8,33 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            @if (IsAuthorized)
+            {
+                <button disabled class="btn btn-outline-danger">@Role</button>
+                <br />
+                <button type="submit" class="btn btn-outline-danger" @onclick="LogOut">Log out</button>
+            }
+            else
+            {
+                @if (string.IsNullOrEmpty(Role))
+                {
+                    <button class="btn btn-outline-secondary" @onclick="() => SelectRole(Constants.Client)">Client</button>
+                    <button class="btn btn-outline-secondary" @onclick="() => SelectRole(Constants.Owner)">Owner</button>
+                }
+                else if (Role == Constants.Client)
+                {
+                    <button class="btn btn-outline-secondary" @onclick="RegisterClient">Register</button>
+                    <br />
+                    <button type="submit" class="btn btn-outline-primary" @onclick="LogInClient">Login</button>
+                }
+                else if (Role == Constants.Owner)
+                {
+                    <button class="btn btn-outline-secondary" @onclick="RegisterOwner">Register</button>
+                    <br />
+                    <button type="submit" class="btn btn-outline-primary" @onclick="LogInOwner">Login</button>
+                }
+            }
+
         </div>
 
         <article class="content px-4">
@@ -14,3 +42,58 @@
         </article>
     </main>
 </div>
+
+
+
+@code{
+    bool IsAuthorized { get; set; }
+    string Role { get; set; }
+
+    [Inject] LocalStorage.LocalStorageService LocalStorageService{ get; set; }
+    [Inject] Microsoft.AspNetCore.Components.Authorization.AuthenticationStateProvider AuthenticationStateProvider { get; set; }
+    [Inject] NavigationManager NavigationManager { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var token = await LocalStorageService.GetToken();
+
+        IsAuthorized = !string.IsNullOrEmpty(token);
+        if(IsAuthorized){
+            var stateProvider = (BlazorCustomAuth.CustomAuthProvider)AuthenticationStateProvider;
+            var state = await stateProvider.GetAuthenticationStateAsync();
+            Role = state.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+        }
+    }
+
+
+    private void SelectRole(string role){
+        Role = role;
+    }
+    private async Task LogOut()
+    {
+        await LocalStorageService.RemoveToken();
+        NavigationManager.NavigateTo("/", forceLoad: true); 
+    }
+
+
+    private void RegisterClient(){
+        NavigationManager.NavigateTo("/pages/account/client/register");
+    }
+
+    private void RegisterOwner()
+    {
+        NavigationManager.NavigateTo("/pages/account/owner/register");
+    }
+  
+
+    private void LogInClient()
+    {
+        NavigationManager.NavigateTo("/pages/account/client/login");
+    }
+
+    private void LogInOwner()
+    {
+        NavigationManager.NavigateTo("/pages/account/owner/login");
+    }
+}

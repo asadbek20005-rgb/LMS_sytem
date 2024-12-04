@@ -1,6 +1,6 @@
 ﻿@page "/pages/course/create"
 @using Microsoft.AspNetCore.Authorization
-@inherits RazorPageCodeSource.Course.CreateOwnerCourseCodeSource
+@inherits RazorPageCodeSource.OwnerPages.OwnerCourses.CreateOwnerCourseCodeSource
 @attribute [Authorize(Roles = Common.Constants.Constants.Owner)]
 <div class="container mt-5">
     <div class="form-card mx-auto shadow-sm">
@@ -9,29 +9,25 @@
         <hr />
 
         <form>
-            <!-- Title Field -->
             <div class="form-group mb-3">
                 <label for="title" class="form-label"><b>Title</b></label>
                 <input type="text" id="title" class="form-control" @bind="@Model.Title" placeholder="Enter title" required />
             </div>
 
-            <!-- Description Field -->
             <div class="form-group mb-3">
                 <label for="description" class="form-label"><b>Description</b></label>
                 <textarea id="description" class="form-control" @bind="@Model.Description" placeholder="Enter description (optional)" rows="4"></textarea>
             </div>
 
-            <!-- Price Field -->
             <div class="form-group mb-3">
                 <label for="price" class="form-label"><b>Price ($)</b></label>
                 <input type="number" id="price" class="form-control" @bind="@Model.Price" placeholder="Enter price" min="0" step="0.01" required />
             </div>
 
-            <!-- Category Field -->
             <div class="form-group mb-4">
                 <label for="category" class="form-label"><b>Category</b></label>
                 <select id="category" class="form-select" @bind="@Model.Category" required>
-                    <option value="">Category</option>
+                    <option value="" disabled selected>Select a category</option>
                     <option value="Backend">Backend</option>
                     <option value="Fullstack">Fullstack</option>
                     <option value="Frontend">Frontend</option>
@@ -39,6 +35,7 @@
                     <option value="Machine Learning">Machine Learning</option>
                 </select>
             </div>
+
 
 
             <div class="text-center">

@@ -1,0 +1,53 @@
+﻿@page "/lessons/{courseId:guid}"
+@inherits RazorPageCodeSource.ClientPages.ClientLessons.ClientLessonsCodeSource
+<h3>ClientLesson</h3>
+@using LMS.Common.Constants
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles =Constants.Client)]
+@foreach(var lesson in Lessons){
+
+    <div class="card-container">
+        <div class="card">
+            <h3 class="card-title">@lesson.Title</h3>
+            <p class="card-description">@lesson.Description</p>
+            <button class="see-videos-btn" @onclick="()=> SeeVideos(lesson.Id)">See Videos</button>
+        </div>
+    </div>
+
+
+}
+<style>
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-around;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  padding: 20px;
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+}
+
+.card-title {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.card-description {
+  font-size: 1rem;
+  color: #666;
+}
+
+</style>

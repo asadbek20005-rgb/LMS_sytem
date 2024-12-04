@@ -20,5 +20,12 @@ namespace LMS.Client.LocalStorage
                 return token;
             return string.Empty;
         }
+
+
+
+        public async Task RemoveToken()
+        {
+           await _storageService.RemoveItemAsync(Constants.TokenKey);
+        }
     }
 }

@@ -1,7 +1,9 @@
 ﻿@page "/pages/course/owner"
+@inherits RazorPageCodeSource.OwnerPages.OwnerCourses.GetAllOwnerCoursesCodeSource
 
-@inherits RazorPageCodeSource.Course.GetAllOwnerCoursesCodeSource
-
+@using LMS.Common.Constants
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles =Constants.Owner)]
 <div class="courses-container">
     @foreach (var course in Courses)
     {
@@ -13,7 +15,7 @@
                 <p class="course-category">Category: <b>@course.Category</b></p>
                 <p class="course-price"><b>@course.Price</b> $</p>
                 <p class="course-date">Created: @course.CreatedDate.ToString("MMMM dd, yyyy")</p>
-                <button class="buy-button">Buy Now</button>
+                <button class="buy-button" @onclick="()=>SelectedCourse(course.Id)">Open Course</button>
             </div>
         </div>
     }

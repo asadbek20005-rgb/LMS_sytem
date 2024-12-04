@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LMS.Api.Controllers.Owner
 {
-    [Route("api/owners/ownerId/courses/courseId/[controller]")]
+    [Route("api/owners/ownerId/courses/{courseId:guid}/[controller]")]
     [ApiController]
     public class OwnerLessonsController(LessonService lessonService, UserHelper userHelper) : ControllerBase
     {

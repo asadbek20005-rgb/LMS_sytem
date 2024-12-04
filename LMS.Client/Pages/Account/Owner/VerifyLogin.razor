@@ -1,12 +1,12 @@
 ﻿@page "/pages/account/owner/verify-login/{code}"
-@inherits RazorPageCodeSource.Owner.VerifyLoginCodeSource
+@inherits RazorPageCodeSource.Accounts.Owner.VerifyLoginCodeSource
 <div class="container">
     <h1>Verify Login</h1>
     <button class="btn btn-danger">@Code</button>
     <hr>
 
     <label><b>Phone Number</b></label>
-    <input type="text" @bind="@OtpModel.PhoneNumber" placeholder="Last name" name="last name"
+    <input type="text" @bind="@OtpModel.PhoneNumber" placeholder="Enter your phone number" name="last name"
            required>
 
     <label for="psw-repeat"><b>Code</b></label>
@@ -14,3 +14,84 @@
 </div>
 
 <button type="submit" class="registerbtn" @onclick="VerifyLogin">Verify Login</button>
+
+
+<style>
+    /* Container styling */
+    .container {
+        width: 50%;
+        margin: 0 auto; /* Center the container */
+        background-color: #f9f9f9; /* Light gray background */
+        padding: 20px;
+        border-radius: 10px; /* Rounded corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+        font-family: Arial, sans-serif; /* Consistent font */
+    }
+
+        /* Heading styling */
+        .container h1 {
+            text-align: center;
+            color: #333; /* Dark gray */
+            margin-bottom: 20px;
+        }
+
+    /* Button styling */
+    .btn {
+        display: inline-block;
+        margin-bottom: 15px;
+        font-size: 16px;
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+    }
+
+        .btn-danger:hover {
+            background-color: #c82333; /* Darker red on hover */
+        }
+
+    /* Label styling */
+    label {
+        display: block;
+        margin: 10px 0 5px;
+        font-weight: bold;
+        color: #555; /* Medium gray */
+    }
+
+    /* Input styling */
+    input[type="text"],
+    input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0 20px;
+        display: block;
+        border: 1px solid #ccc; /* Light gray border */
+        border-radius: 5px;
+        box-sizing: border-box; /* Ensure proper box model */
+        font-size: 14px;
+    }
+
+    /* Submit button styling */
+    .registerbtn {
+        width: 100%;
+        background-color: #4caf50; /* Green */
+        color: white;
+        font-size: 16px;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .registerbtn:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+</style>

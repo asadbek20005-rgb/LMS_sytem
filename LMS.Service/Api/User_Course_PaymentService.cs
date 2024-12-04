@@ -4,7 +4,7 @@ using LMS.Data.Entities;
 using LMS.Data.Repositories.Interfaces;
 using LMS.Service.Extensions;
 using LMS.Service.Helpers;
-
+using LMS.Data.Exceptions.User;
 namespace LMS.Service.Api
 {
     public class User_Course_PaymentService(IUserRepository userRepository, IUser_CourseRepository user_CourseRepository, IUser_Course_PaymentRepository user_Course_PaymentRepository, ICourseRepository courseRepository)
@@ -21,9 +21,10 @@ namespace LMS.Service.Api
                 var user = await _userRepository.GetUserById(userId);
                 var userCourse = await _userCourseRepository.GetCourseById(courseId);
                 var course = await _courseRepository.GetCourseById(userCourse.CourseId);
-                if (course.Price != createUser_Course_Payment.Amount)
-                    throw new Exception("Amuount is not correct");
+                IsValidAmount(course.Price, createUser_Course_Payment.Amount);
                 decimal totalAmount = await PaymentHelperProseccer.CalculateAmount(createUser_Course_Payment.Amount);
+
+
 
                 var newPayment = new User_Course_Payment
                 {
@@ -34,7 +35,7 @@ namespace LMS.Service.Api
                 };
                 var newUserCourse = new User_Course
                 {
-                    UserId = userId,
+                    UserId = user.Id,
                     CourseId = course.Id,
                     IsPayed = true,
                 };
@@ -50,5 +51,14 @@ namespace LMS.Service.Api
                 throw new Exception(ex.Message);
             }
         }
+
+
+        private void IsValidAmount(decimal price, int amount)
+        {
+            if (price != amount)
+                throw new Exception("Amuount is not correct");
+        }
+
+
     }
 }

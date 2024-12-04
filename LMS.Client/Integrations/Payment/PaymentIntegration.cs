@@ -12,11 +12,11 @@ namespace LMS.Client.Integrations.Payment
         public async Task<HttpStatusCode> Pay(Guid courseId, CreateUser_Course_Payment createUser_Course_Payment, CreateCardInfoModel createCardInfoModel)
         {
             await _tokenHelper.AddTokenToHeader();
-            string url = $"/api/clients/clientId/courses/{courseId}/Payments";
+            string url = $"/api/clients/clientId/courses/{courseId}/ClientsPayments";
             var response = await _httpClient.PostAsJsonAsync(url, createUser_Course_Payment);
             if (response.IsSuccessStatusCode)
             {
-                string urlCard = "/api/clients/clientId/Cards";
+                string urlCard = "/api/clients/clientId/ClientCards";
                 var response2 = await _httpClient.PostAsJsonAsync(urlCard, createCardInfoModel);
                 return response2.StatusCode;
             }

@@ -11,12 +11,12 @@ namespace LMS.Api.Controllers.Course
         private readonly CourseService _courseService = courseService;
 
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetAllCourses()
-        //{
-        //    var courses = await _courseService.get();
-        //    return Ok(courses);
-        //}
+        [HttpGet]
+        public async Task<IActionResult> GetAllCourses()
+        {
+            var courses = await _courseService.GetAllCourses();
+            return Ok(courses);
+        }
         [HttpGet("{courseId:guid}")]
         public async Task<IActionResult> GetCourse(Guid courseId)
         {

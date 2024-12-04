@@ -15,10 +15,9 @@ namespace LMS.Data.Entities
         public string PhoneNumber { get; set; } // Phone number must be unique
         [Required]
         public string PasswordHash { get; set; }
-        [Required]
-        public int Code { get; set; }
+       
         public required string Role { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }= DateTime.UtcNow;
         public bool IsBlocked { get; set; }
 
         public virtual List<User_Course>? Courses { get; set; }

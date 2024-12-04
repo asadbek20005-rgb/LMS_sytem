@@ -1,5 +1,5 @@
 ﻿@page "/pages/account/owner/login"
-@inherits RazorPageCodeSource.Owner.LoginCodeSource
+@inherits RazorPageCodeSource.Accounts.Owner.LoginCodeSource
 <div class="container">
     <h1>Login</h1>
     <p>Please fill in this form to create an account.</p>
@@ -10,7 +10,7 @@
            required>
 
     <label><b>Phone Number</b></label>
-    <input type="text" @bind="@model.PhoneNumber" placeholder="Last name" name="last name"
+    <input type="text" @bind="@model.PhoneNumber" placeholder="Enter your phone number" name="last name"
            required>
 
     <label for="psw"><b>Password</b></label>

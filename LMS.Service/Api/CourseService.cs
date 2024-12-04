@@ -14,6 +14,13 @@ namespace LMS.Service.Api
         private readonly IUserRepository _userRepository = userRepository;
         private readonly IUser_CourseRepository _userCourseRepository = user_CourseRepository;
 
+        public async Task<List<CourseDto>> GetAllCourses()
+        {
+            var courses = await _courseRepository.GetAllCourses();
+            return courses.ParseToDtos();
+        }
+
+
         public async Task<List<CourseDto>> SortBy(string? category = null, string? title = null, decimal? price = null)
         {
             try

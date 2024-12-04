@@ -1,0 +1,115 @@
+﻿@page "/owner-lessons/{courseId:guid}"
+@inherits RazorPageCodeSource.OwnerPages.OwnerLessons.OwnerLessonsSourceCode
+
+@using LMS.Common.Constants
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = Constants.Owner)]
+
+    @foreach(var lesson in Lessons){
+    <div class="container">
+        <div class="cards">
+            <!-- Har bir karta -->
+            <div class="card">
+                <h2 class="card-title">@lesson.Title</h2>
+                <p class="card-description">
+                    @lesson.Description
+                </p>
+                <button class="see-videos-btn" @onclick="()=>SeeVideos(lesson.Id)">See Videos</button>
+            </div>
+        </div>
+    </div>
+    }
+
+
+<div class="header">
+    <button class="add-lesson-btn" onclick="@NavigateToCreateLesson">Add Lesson</button>
+</div>
+
+
+
+   
+<style>
+
+  
+    /* Tugma dizayni */
+    .add-lesson-btn {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1rem; /* Shrift hajmini ekran o'lchamiga mos qilish */
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        /* Hover effekti */
+        .add-lesson-btn:hover {
+            background-color: #45a049;
+        }
+
+    /* Asosiy konteyner */
+    .container {
+        max-width: 1200px;
+        margin: 20px auto; /* Markazlash */
+        padding: 10px;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Karta qismi */
+    .cards {
+        display: flex;
+        flex-wrap: wrap; /* Kartalar bir qatorda joylashadi, joy yetmasa yangi qatorga o'tadi */
+        gap: 20px; /* Kartalar orasidagi bo'shliq */
+        justify-content: center; /* Kartalarni markazga joylashtirish */
+    }
+
+    /* Har bir karta */
+    .card {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 300px; /* Karta kengligi */
+        padding: 20px;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        /* Karta hover effekti */
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+    /* Karta sarlavhasi */
+    .card-title {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    /* Karta tavsifi */
+    .card-description {
+        font-size: 1rem;
+        margin-bottom: 15px;
+        color: #666;
+    }
+
+    /* Tugma */
+    .see-videos-btn {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+    /* Tugma
+
+
+</style>

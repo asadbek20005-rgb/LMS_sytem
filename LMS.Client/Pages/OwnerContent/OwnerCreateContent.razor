@@ -1,0 +1,51 @@
+﻿@page "/owner-create-content/{courseId:guid}/{lessonId:int}"
+
+
+@page "/video-upload"
+@inject HttpClient Http
+
+<h3>Video Yuklash</h3>
+<input type="file" @onchange="OnVideoSelected" accept="video/*" />
+<video controls style="width: 80%; margin-top: 20px;" hidden></video>
+<button @onclick="UploadVideo" disabled="@(!IsVideoSelected)">Yuklash</button>
+
+<p>@StatusMessage</p>
+
+@code {
+    private IBrowserFile? SelectedVideoFile { get; set; }
+    private string StatusMessage { get; set; } = "";
+    private bool IsVideoSelected => SelectedVideoFile != null;
+
+    private async Task OnVideoSelected(InputFileChangeEventArgs e)
+    {
+        SelectedVideoFile = e.File;
+        StateHasChanged();
+    }
+
+    private async Task UploadVideo()
+    {
+        if (SelectedVideoFile != null)
+        {
+            StatusMessage = "Video yuklanmoqda...";
+            try
+            {
+                using var content = new MultipartFormDataContent();
+                content.Add(new StreamContent(SelectedVideoFile.OpenReadStream(50000000)), "file", SelectedVideoFile.Name);
+
+                var response = await Http.PostAsync("api/video/upload", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    StatusMessage = "Video muvaffaqiyatli yuklandi!";
+                }
+                else
+                {
+                    StatusMessage = "Yuklashda xatolik yuz berdi.";
+                }
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Xatolik: {ex.Message}";
+            }
+        }
+    }
+}
