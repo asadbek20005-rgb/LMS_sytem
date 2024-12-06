@@ -28,7 +28,7 @@ namespace LMS.Client.RazorPageCodeSource.OwnerPages.OwnerCourses
             return null;
         }
 
-        public void SelectedCourse(Guid courseId)
+        public void SelectOwnerCourse(Guid courseId)
         {
             NavigationManager.NavigateTo($"/owner-lessons/{courseId}");
         }

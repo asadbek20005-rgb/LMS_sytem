@@ -28,7 +28,12 @@ namespace LMS.Client.RazorPageCodeSource.OwnerPages.OwnerContents
 
         public void SeeVideo(int contentId)
         {
-            NavigationManager.NavigateTo($"/seeVideo/{CourseId}/{LessonId}/{contentId}");
+            NavigationManager.NavigateTo($"/see-vedio-owner/{CourseId}/{LessonId}/{contentId}");
+        }
+
+        public void GotoCreateContent()
+        {
+            NavigationManager.NavigateTo($"owner-create-content/{CourseId}/{LessonId}");
         }
     }
 }

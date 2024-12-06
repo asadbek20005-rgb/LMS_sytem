@@ -50,5 +50,7 @@ namespace LMS.Client.Integrations.Course
 
             return new(response.StatusCode, courseDtos);
         }
+
+        
     }
 }

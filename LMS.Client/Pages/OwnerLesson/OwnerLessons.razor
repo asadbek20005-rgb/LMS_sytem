@@ -8,13 +8,12 @@
     @foreach(var lesson in Lessons){
     <div class="container">
         <div class="cards">
-            <!-- Har bir karta -->
             <div class="card">
                 <h2 class="card-title">@lesson.Title</h2>
                 <p class="card-description">
                     @lesson.Description
                 </p>
-                <button class="see-videos-btn" @onclick="()=>SeeVideos(lesson.Id)">See Videos</button>
+                <button class="see-videos-btn" @onclick="() => SeeVideos(lesson.Id)">See Videos</button>
             </div>
         </div>
     </div>

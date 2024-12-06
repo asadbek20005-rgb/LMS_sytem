@@ -5,18 +5,20 @@ using LMS.Data.Repositories.Interfaces;
 using LMS.Service.Extensions;
 using LMS.Service.Helpers;
 using LMS.Service.MinioStorage;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Metadata;
 
 namespace LMS.Service.Api
 {
-    public class ContentServce(IContentRepository contentRepository, MinioStorageService minioStorageService)
+    public class ContentServce(IContentRepository contentRepository)
     {
         private readonly IContentRepository _contentRepository = contentRepository;
-        public async Task<ContentDto> AddOrUpdateContent(Guid userId, Guid courseId, int lessonId, AddOrUpdateContentModel addOrUpdateContentModel)
+        public async Task<ContentDto> AddOrUpdateContent(Guid userId, Guid courseId, int lessonId, AddOrUpdateContentModel formFile)
         {
             try
             {
 
-                var videoFile = addOrUpdateContentModel.FormFile;
+                var videoFile = formFile.FormFile;
                 ContentHelper.IsVideo(videoFile);
                 var data = await ContentHelper.GetBytes(videoFile);
                 var folderPath = Path.Combine("wwwroot", "Videos");

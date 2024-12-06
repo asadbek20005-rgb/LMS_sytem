@@ -7,19 +7,16 @@
 <div class="lesson-form-container">
     <h1>Create a New Lesson</h1>
     <form>
-        <!-- Title -->
         <div class="form-group">
             <label for="title">Lesson Title</label>
             <input type="text" @bind="@CreateLessonModel.Title" id="title" name="title" placeholder="Enter the lesson title" required />
         </div>
 
-        <!-- Description -->
         <div class="form-group">
             <label for="description">Description</label>
             <textarea id="description" @bind="@CreateLessonModel.Description" name="description" placeholder="Enter the lesson description"></textarea>
         </div>
 
-        <!-- Submit Button -->
         <div class="form-group">
             <button type="submit" onclick="@CreateLesson" class="btn-submit">Add Lesson</button>
         </div>

@@ -23,7 +23,7 @@ namespace LMS.Data.Repositories.Implementations
             var userCourseLesson = await _context.User_Courses
                 .Include(uc => uc.Course)
                     .ThenInclude(c => c.Lessons)
-                        .ThenInclude(l => l.Contents) // Eager Loading for Contents
+                        .ThenInclude(l => l.Contents) 
                 .Where(uc => uc.UserId == userId && uc.CourseId == courseId)
                 .SelectMany(uc => uc.Course.Lessons)
                 .FirstOrDefaultAsync(l => l.Id == lessonId);

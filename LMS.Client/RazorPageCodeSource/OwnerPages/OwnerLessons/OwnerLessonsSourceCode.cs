@@ -27,7 +27,7 @@ namespace LMS.Client.RazorPageCodeSource.OwnerPages.OwnerLessons
 
         public async Task SeeVideos(int lessonId)
         {
-            NavigationManager.NavigateTo($"/owner-contents/{CourseId}/{lessonId}");
+            NavigationManager.NavigateTo($"/ownercontents/{CourseId}/{lessonId}");
         }
 
         public void NavigateToCreateLesson()

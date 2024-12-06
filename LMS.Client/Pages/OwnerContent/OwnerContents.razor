@@ -1,7 +1,5 @@
-﻿@page "/owner-contents/{courseId:guid}/{lessonId:int}"
+﻿@page "/ownercontents/{courseId:guid}/{lessonId:int}"
 @inherits RazorPageCodeSource.OwnerPages.OwnerContents.OwnerContents
-
-
 @using LMS.Common.Constants
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize(Roles = Constants.Owner)]
@@ -15,7 +13,45 @@
 
     </div>
 }
+
+
+<button class="fancy-button" @onclick="GotoCreateContent">
+    <i class="fa fa-plus"></i> Add Content
+</button>
+
 <style>
+
+    .fancy-button i {
+        margin-right: 8px;
+        font-size: 16px;
+    }
+
+
+    .fancy-button {
+        background: linear-gradient(45deg, #6a11cb, #2575fc);
+        border: none;
+        border-radius: 25px;
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        padding: 12px 24px;
+        cursor: pointer;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s ease;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    }
+
+        .fancy-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            background: linear-gradient(45deg, #2575fc, #6a11cb);
+        }
+
+        .fancy-button:active {
+            transform: translateY(1px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
     .content-container {
         display: flex;
         justify-content: space-evenly;
@@ -25,7 +61,6 @@
         max-width: 1200px;
     }
 
-    /* Content Card */
     .content-card {
         background-color: #fff;
         border-radius: 8px;
@@ -45,7 +80,6 @@
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
         }
 
-    /* Content Title */
     .content-title {
         font-size: 22px;
         font-weight: bold;
@@ -53,7 +87,6 @@
         margin-bottom: 15px;
     }
 
-    /* Content Action Button */
     .content-action-btn {
         background-color: #007bff;
         color: white;

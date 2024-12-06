@@ -16,10 +16,10 @@ namespace LMS.Api.Controllers.Owner
 
         [HttpPost]
         [Authorize(Roles = Constants.Owner)]
-        public async Task<IActionResult> AddContent(Guid courseId, int lessonId, AddOrUpdateContentModel createContentModel)
+        public async Task<IActionResult> AddContent(Guid courseId, int lessonId,[FromForm] AddOrUpdateContentModel formFile)
         {
             var userId = _userHelper.GetUserId();
-            var dto = await _contentServce.AddOrUpdateContent(userId, courseId, lessonId, createContentModel);
+            var dto = await _contentServce.AddOrUpdateContent(userId, courseId, lessonId, formFile);
             return Ok(dto);
         }
 

@@ -15,14 +15,13 @@
                 <p class="course-category">Category: <b>@course.Category</b></p>
                 <p class="course-price"><b>@course.Price</b> $</p>
                 <p class="course-date">Created: @course.CreatedDate.ToString("MMMM dd, yyyy")</p>
-                <button class="buy-button" @onclick="()=>SelectedCourse(course.Id)">Open Course</button>
+                <button class="buy-button" @onclick="()=>SelectOwnerCourse(course.Id)">Open Course</button>
             </div>
         </div>
     }
 </div>
 
 <style>
-    /* General container styling */
     .courses-container {
         display: flex;
         flex-wrap: wrap;

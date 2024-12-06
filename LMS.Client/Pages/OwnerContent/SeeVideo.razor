@@ -1,11 +1,18 @@
 ﻿@page "/see-vedio-owner/{courseId:guid}/{lessonId:int}/{contentId:int}"
-
-
+@inherits RazorPageCodeSource.OwnerPages.OwnerContents.SeeVideoSourceCode
 @using LMS.Common.Constants
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize(Roles = Constants.Owner)]
-<h3>SeeVideo</h3>
+@if (Url != null)
+{
+    <video width="600" controls>
+        <source src="@Url" type="@ContentType" />
+        Sizning brauzeringiz ushbu videoni ko'rsata olmaydi.
+     </video>
 
-@code {
-
+    <p>@Url</p>
+}
+else
+{
+    <p>Video yuklanmoqda...</p>
 }

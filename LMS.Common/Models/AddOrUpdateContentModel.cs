@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace LMS.Common.Models
 {
     public class AddOrUpdateContentModel
     {
-        public required IFormFile FormFile {  get; set; }
+        [Required]
+        public  IFormFile FormFile {  get; set; }
     }
 }

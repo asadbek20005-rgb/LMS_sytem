@@ -52,7 +52,7 @@ namespace LMS.Api.Controllers.Owner
         [HttpGet]
         [Authorize(Roles = Constants.Owner)]
         public async Task<IActionResult> GetAllOwnerCourse()
-        {
+            {
             try
             {
                 var userId = _userHelper.GetUserId();
@@ -79,7 +79,7 @@ namespace LMS.Api.Controllers.Owner
 
 
         [HttpPut("set-price")]
-        //[Authorize(Roles = Constants.Owner)]
+        [Authorize(Roles = Constants.Owner)]
         public async Task<IActionResult> UpdateCoursePrice(Guid courseId, UpdateCourseModel updateCourseModel)
         {
             try
