@@ -2,11 +2,20 @@
 @inherits RazorPageCodeSource.ClientPages.ClientContent.SeeVideoCodeSource
 @using LMS.Common.Constants
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles =Constants.Client)]
-<video controls class="responsive-video">
-    <source src="@VideUrl" type="video/mp4">
-    Your browser does not support the video tag.
-</video>
+@attribute [Authorize(Roles = Constants.Client)]
+
+@if (VideUrl is not null)
+{
+    <video controls class="responsive-video">
+        <source src="@VideUrl" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <p>@VideUrl</p>
+}
+else
+{
+    <p>Video is not found</p>
+}
 
 
 <style>

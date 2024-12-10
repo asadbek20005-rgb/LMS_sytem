@@ -32,7 +32,7 @@ namespace LMS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("CardHolderNumber")
+                    b.Property<string>("CardHolderName")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -40,7 +40,7 @@ namespace LMS.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -187,12 +187,12 @@ namespace LMS.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("889ccd90-3980-4727-ab9f-69bf1df516bd"),
-                            CreatedDate = new DateTime(2024, 12, 2, 9, 3, 7, 584, DateTimeKind.Utc).AddTicks(1825),
+                            Id = new Guid("105e2cd0-4215-45a6-a143-7b05bae313d5"),
+                            CreatedDate = new DateTime(2024, 12, 8, 3, 14, 15, 379, DateTimeKind.Utc).AddTicks(326),
                             FirstName = "Asadbek",
                             IsBlocked = false,
                             LastName = "Shermatov",
-                            PasswordHash = "AQAAAAIAAYagAAAAECoDZ/4NAq4O1ZGz+ddwbzUXQFAdComYuPw1aW4TDEeLk+OT6ORxyDF1Q2xAI+vuCA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKLSBtAoBBISJTK39fDKXhTYiEUEeGycR0O9N2KXmco5lF+/Ii4OUX4SFSl0QofREA==",
                             PhoneNumber = "+998945631282",
                             Role = "admin",
                             Username = "spawn"
@@ -288,7 +288,9 @@ namespace LMS.Data.Migrations
                 {
                     b.HasOne("LMS.Data.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });

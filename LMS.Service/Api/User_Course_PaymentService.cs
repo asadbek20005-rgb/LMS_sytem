@@ -22,8 +22,9 @@ namespace LMS.Service.Api
                 var userCourse = await _userCourseRepository.GetCourseById(courseId);
                 var course = await _courseRepository.GetCourseById(userCourse.CourseId);
                 IsValidAmount(course.Price, createUser_Course_Payment.Amount);
+                await _repository.CheckCoursePayment(userId, courseId);
                 decimal totalAmount = await PaymentHelperProseccer.CalculateAmount(createUser_Course_Payment.Amount);
-
+                
 
 
                 var newPayment = new User_Course_Payment
@@ -59,6 +60,7 @@ namespace LMS.Service.Api
                 throw new Exception("Amuount is not correct");
         }
 
+      
 
     }
 }

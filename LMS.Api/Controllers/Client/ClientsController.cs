@@ -49,13 +49,6 @@ namespace LMS.Api.Controllers.Client
 
 
 
-        //[HttpGet("/api/clients/courses")]
-        //[Authorize(Roles = Constants.Client)]
-        //public async Task<IActionResult> SortByCategory([FromQuery] string category )
-        //{
-        //    var courses = await _courseService.SortByCategory(category);
-        //    return Ok(courses);
-        //}
 
     }
 }

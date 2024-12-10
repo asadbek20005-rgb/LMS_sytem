@@ -18,16 +18,17 @@ namespace LMS.Service.Api
         {
             try
             {
-                _ = await _userRepository.GetUserById(userId);
-                var isValidateCard = IsValidateCard(createCardInfoModel.CardNumber, createCardInfoModel.CVV, createCardInfoModel.CardHolderNumber);
+                var user = await _userRepository.GetUserById(userId);
+                var isValidateCard = IsValidateCard(createCardInfoModel.CardNumber, createCardInfoModel.CVV, createCardInfoModel.CardHolderName);
                 if (isValidateCard)
                 {
                     var hasher = new PasswordHasher<CardInfo>();
                     var newCardInfo = new CardInfo
                     {
-                        CardHolderNumber = hasher.HashPassword(null, createCardInfoModel.CardHolderNumber), 
+                        CardHolderName = hasher.HashPassword(null, createCardInfoModel.CardHolderName), 
                         CardNumber = hasher.HashPassword(null, createCardInfoModel.CardNumber),           
                         CVVHash = hasher.HashPassword(null, createCardInfoModel.CVV),
+                        UserId = user.Id,
                     };
 
 
@@ -48,13 +49,23 @@ namespace LMS.Service.Api
         }
 
 
-        private static bool IsValidateCard(string cardNumber, string cvv, string cardHolderNumber)
+        private static bool IsValidateCard(string cardNumber, string cvv, string cardHolderName)
         {
-            if (cardNumber.Length == 16 && !string.IsNullOrEmpty(cvv) && !string.IsNullOrEmpty(cardHolderNumber))
+            if (string.IsNullOrEmpty(cardNumber) || cardNumber.Length != 16)
             {
-                return true;
+                return false;
             }
-            return false;
+
+            if(string.IsNullOrEmpty(cvv) || cvv.Length != 3)
+            {
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(cardHolderName)){
+                return false;
+            }
+            return true;
+
         }
     }
 }

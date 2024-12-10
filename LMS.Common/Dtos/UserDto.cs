@@ -9,7 +9,7 @@
         public required string PhoneNumber { get; set; } 
         public required string PasswordHash { get; set; }
         public required string Role { get; set; }
-        public required bool IsBlock { get; set; }
+        public required bool IsBlocked { get; set; }
         public DateTime CreatedDate { get; set; }
 
         public List<User_CourseDto>? Courses { get; set; }

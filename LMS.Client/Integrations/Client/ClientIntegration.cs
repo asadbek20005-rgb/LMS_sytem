@@ -44,13 +44,3 @@ namespace LMS.Client.Integrations.Client
         }
     }
 }
-
-
-
-//public async Task<Tuple<HttpStatusCode, object>> Register(RegisterUserModel registerUser)
-//{
-//    string url = "/api/Users/Register";
-//    var response = await _httpClient.PostAsJsonAsync(url, registerUser);
-//    var result = await response.Content.ReadAsStringAsync();
-//    return new(response.StatusCode, result);
-//}

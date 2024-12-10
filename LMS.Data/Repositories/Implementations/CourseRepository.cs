@@ -82,7 +82,7 @@ namespace LMS.Data.Repositories.Implementations
                 throw new CourseNotFoundException();
 
             return course;
-        }
+            }
 
         public Task<Course> GetPayedUserCourse(Guid userId, Guid courseId)
         {

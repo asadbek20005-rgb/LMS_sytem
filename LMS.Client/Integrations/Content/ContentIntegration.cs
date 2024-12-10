@@ -3,7 +3,6 @@ using LMS.Common.Dtos;
 using LMS.Common.Models;
 using Microsoft.AspNetCore.Components.Forms;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Json;
 
 namespace LMS.Client.Integrations.Content
@@ -15,18 +14,28 @@ namespace LMS.Client.Integrations.Content
         public async Task<(HttpStatusCode, string)> GetClientContent(Guid courseId, int lessonId, int contentId)
         {
             await _tokenHelper.AddTokenToHeader();
-            string url = $"/api/clients/clientId/courses/{courseId}/lessons/{lessonId}ClientContents/{contentId}";
-            var response = await _httpClient.GetAsync(url);
-            var stream = response.RequestMessage?.RequestUri?.ToString();
+            var token = await _tokenHelper.GetToken();
+            string url = $"/api/clients/clientId/courses/{courseId}/lessons/{lessonId}/ClientContents/{contentId}?token={token}";
 
-            return new(response.StatusCode, stream);
+            var response = await _httpClient.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var stream = await response.Content.ReadAsStreamAsync();
+                return (response.StatusCode, stream.ToString());  
+            }
+            else
+            {
+                return (response.StatusCode, null);
+            }
         }
+
 
 
         public async Task<Tuple<HttpStatusCode, List<ContentDto>>> GetClientContents(Guid courseId, int lessonId)
         {
             await _tokenHelper.AddTokenToHeader();
-            string url = $"/api/clients/clientId/courses/{courseId}/lessons/{lessonId}ClientContents";
+            string url = $"/api/clients/clientId/courses/{courseId}/lessons/{lessonId}/ClientContents";
             var response = await _httpClient.GetAsync(url);
             var contentDtos = await response.Content.ReadFromJsonAsync<List<ContentDto>>();
             if (contentDtos is null)
@@ -67,7 +76,7 @@ namespace LMS.Client.Integrations.Content
             await _tokenHelper.AddTokenToHeader();
             var content = new MultipartFormDataContent();
             if (addOrUpdateContent.FormFile != null && addOrUpdateContent.FormFile.Length > 0)
-            {   
+            {
                 var fileContent = new StreamContent(addOrUpdateContent.FormFile.OpenReadStream());
                 fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
                 content.Add(fileContent, "FormFile", addOrUpdateContent.FormFile.FileName);
@@ -79,7 +88,7 @@ namespace LMS.Client.Integrations.Content
 
             string url = $"/api/owners/ownerId/courses/{courseId}/lessons/{lessonId}/OwnerContents";
             var response = await _httpClient.PostAsync(url, content);
-                return response.StatusCode;
+            return response.StatusCode;
         }
     }
 }

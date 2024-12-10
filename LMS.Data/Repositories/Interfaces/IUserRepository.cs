@@ -10,7 +10,8 @@ namespace LMS.Data.Repositories.Interfaces
         Task CheckUserPhone(string userPhoneNumber);
         Task CheckUsername(string username);
         Task<User> GetUserByPhoneNumber(string phoneNumber);    
-        Task BlockUser(Guid userId);
+        Task BlockUser(Guid userId);  
+        Task UnBlockUser(Guid userId);
         Task VerifyUsername(string username);
         Task <User> GetUserByUsername(string username);
         Task CheckRoleClient(string role);

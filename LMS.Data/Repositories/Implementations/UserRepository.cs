@@ -47,9 +47,9 @@ namespace LMS.Data.Repositories.Implementations
 
         public async Task BlockUser(Guid userId)
         {
-            var user = await _context.Users.FindAsync(userId) ?? throw new UserNotFoundException();
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId) ?? throw new UserNotFoundException();
             user.IsBlocked = true;
-            _context.Update(user);
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
         }
 
@@ -119,6 +119,14 @@ namespace LMS.Data.Repositories.Implementations
 
             if (user.Role != Constants.Admin)
                 throw new RoleNotVerifyException("Role must be <<Admin>>");
+        }
+
+        public async Task UnBlockUser(Guid userId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == userId) ?? throw new UserNotFoundException();
+            user.IsBlocked = false;
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
         }
     }
 }

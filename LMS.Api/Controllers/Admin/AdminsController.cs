@@ -45,12 +45,20 @@ namespace LMS.Api.Controllers.Admin
             return Ok();
         }
 
-            
-        [HttpDelete("action/content")]
+        [HttpPut("action/unblock")]
         [Authorize(Roles = Constants.Admin)]
-        public IActionResult DeleteContent(string fileName)
+        public async Task<IActionResult> UnBlockUser(Guid userId)
         {
-           bool result = _adminService.DeleteFile(fileName);
+            await _adminService.UnBlockUser(userId);
+            return Ok();
+        }
+
+
+        [HttpDelete("action/content")]
+        [Authorize(Roles = Constants.Admin)]    
+        public async Task<IActionResult> DeleteContent(Guid userId, Guid courseId, int lessonId, int contentId)
+        {
+           bool result = await _adminService.DeleteFile(userId,courseId,lessonId,contentId);
             return Ok(result);
         }
 

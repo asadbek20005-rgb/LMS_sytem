@@ -1,7 +1,5 @@
 ﻿using LMS.Client.Integrations.Content;
 using Microsoft.AspNetCore.Components;
-using System.ComponentModel;
-using System.Net.Http;
 
 namespace LMS.Client.RazorPageCodeSource.ClientPages.ClientContent
 {
@@ -17,7 +15,7 @@ namespace LMS.Client.RazorPageCodeSource.ClientPages.ClientContent
 
         protected override async Task OnInitializedAsync()
         {
-            VideUrl = await SeeVideo();
+            VideUrl = await SeeVideo(); 
         }
 
         public async Task<string> SeeVideo()
@@ -26,24 +24,22 @@ namespace LMS.Client.RazorPageCodeSource.ClientPages.ClientContent
 
             if (statusCode == System.Net.HttpStatusCode.OK)
             {
-
                 return stream;
             }
 
-            return null;
+            return null; 
         }
 
         public async Task<string> GetVideoUrl(Guid courseId, int lessonId, int contentId)
         {
-            // API endpoint orqali video fayli URL olish
             var client = HttpClientFactory.Create();
-            var url = $"{NavigationManager.BaseUri}/api/clients/clientId/courses/{courseId}/lessons/{lessonId}ClientContents/{contentId}";
+            var url = $"{NavigationManager.BaseUri}/api/clients/clientId/courses/{courseId}/lessons/{lessonId}/ClientContents/{contentId}";
 
             var response = await client.GetAsync(url);
 
             if (response.IsSuccessStatusCode)
             {
-                // Video fayli uchun URL ni olish
+
                 return url;
             }
 

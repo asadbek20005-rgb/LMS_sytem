@@ -22,12 +22,12 @@ namespace LMS.Service.Api
                 ContentHelper.IsVideo(videoFile);
                 var data = await ContentHelper.GetBytes(videoFile);
                 var folderPath = Path.Combine("wwwroot", "Videos");
-                var filePath = Path.Combine(folderPath, videoFile.FileName);
+                var filePath = Path.Combine(folderPath, formFile.FIleName);
                 if (data is not null)
                     await System.IO.File.WriteAllBytesAsync(filePath, data);
                 var newContent = new Content
                 {
-                    Name = videoFile.FileName,
+                    Name = formFile.FIleName,
                     LessonId = lessonId,
                 };
                 await _contentRepository.AddOrUpdateContent(newContent);
@@ -41,29 +41,29 @@ namespace LMS.Service.Api
         }
 
 
-        public bool DeleteFile(string fileName)
+        public async Task<bool> DeleteFile(Guid userId, Guid courseId,int lessonId,int contentId)
         {
             try
             {
+                var content = await _contentRepository.GetContentById(userId, courseId,lessonId,contentId);
+               
                 string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "videos");
-                string filePath = Path.Combine(rootPath, fileName);
+                string filePath = Path.Combine(rootPath, content.Name);
 
                 if (System.IO.File.Exists(filePath))
                 {
 
                     System.IO.File.Delete(filePath);
-                    Console.WriteLine("Fayl muvaffaqiyatli o'chirildi: " + filePath);
+                    return true;
 
                 }
 
-                Console.WriteLine("Fayl topilmadi: " + filePath);
                 return false;
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return false;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -81,12 +81,11 @@ namespace LMS.Service.Api
             }
         }
 
-        public async Task<(Stream stream, string fileName, string contentType)> GetContent(Guid userId, Guid courseId, int lessonId, int contentId)
+        public async Task<Stream> GetContent(Guid userId, Guid courseId, int lessonId, int contentId)
         {
             try
             {
                 var content = await _contentRepository.GetContentById(userId, courseId, lessonId, contentId);
-
                 var fileName = content?.Name;
 
                 if (string.IsNullOrEmpty(fileName))
@@ -95,21 +94,18 @@ namespace LMS.Service.Api
                 }
 
                 var folderPath = Path.Combine("wwwroot", "Videos");
-
                 var filePath = Path.Combine(folderPath, fileName);
 
                 if (System.IO.File.Exists(filePath))
                 {
                     var ms = new MemoryStream();
-                    var fileStream = new FileStream(filePath,FileMode.Open,FileAccess.Read);
-                    await fileStream.CopyToAsync(ms);   
-                    ms.Position = 0;
-                    var contentType = "application/octet-stream";
-                    if (Path.GetExtension(fileName)?.ToLower() == ".mp4")
+                    using (var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                     {
-                        contentType = "video/mp4";
+                        await fileStream.CopyToAsync(ms);
                     }
-                    return (ms, contentType, fileName);
+
+                    ms.Position = 0;
+                    return ms;
                 }
                 else
                 {
@@ -121,6 +117,7 @@ namespace LMS.Service.Api
                 throw new Exception(ex.Message);
             }
         }
+
 
 
 

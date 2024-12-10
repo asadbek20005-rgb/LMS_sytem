@@ -74,17 +74,31 @@ namespace LMS.Service.Api
             }
         }
 
-        public bool DeleteFile(string fileName)
+        public async Task UnBlockUser(Guid userId)
         {
             try
             {
-                bool result = _contentService.DeleteFile(fileName);
+
+                await _userRepository.UnBlockUser(userId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        public async Task<bool> DeleteFile(Guid userId, Guid courseId, int lessonId, int contentId)
+        {
+            try
+            {
+                bool result = await _contentService.DeleteFile(userId, courseId,lessonId,contentId);
                 return result;
 
             }
             catch (Exception ex)
             {
-                return false;
+                throw new Exception(ex.Message);
             }
         }
 

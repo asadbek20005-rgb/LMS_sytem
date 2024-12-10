@@ -80,12 +80,12 @@ namespace LMS.Api.Controllers.Owner
 
         [HttpPut("set-price")]
         [Authorize(Roles = Constants.Owner)]
-        public async Task<IActionResult> UpdateCoursePrice(Guid courseId, UpdateCourseModel updateCourseModel)
+        public async Task<IActionResult> UpdateCoursePrice(Guid courseId, decimal amount)
         {
             try
             {
                 var userId = _userHelper.GetUserId();
-                var dto = await _courseService.UpdateUserCoursePrice(userId, courseId, updateCourseModel);
+                var dto = await _courseService.UpdateUserCoursePrice(userId, courseId, amount);
                 return Ok(dto);
             }
             catch (Exception ex)

@@ -129,7 +129,6 @@ namespace LMS.Service.Api
         {
             try
             {
-
                 var allCourses = await _courseRepository.GetAllPayedUserCourses(userId);
                 return allCourses.ParseToDtos();
             }
@@ -167,12 +166,12 @@ namespace LMS.Service.Api
             }
         }
 
-        public async Task<CourseDto> UpdateUserCoursePrice(Guid userId, Guid courseId, UpdateCourseModel updateCourseModel)
+        public async Task<CourseDto> UpdateUserCoursePrice(Guid userId, Guid courseId, decimal price)
         {
             try
             {
                 var course = await _courseRepository.GetUserCourseById(userId, courseId);
-                course.Price = updateCourseModel.Price;
+                course.Price = price;
                 await _courseRepository.UpdateCourse(course);
                 return course.ParseToDto();
 

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LMS.Api.Controllers.Client
 {
-    [Route("api/clients/clientId/courses/{courseId:guid}/lessons/{lessonId:int}[controller]")]
+    [Route("api/clients/clientId/courses/{courseId:guid}/lessons/{lessonId:int}/[controller]")]
     [ApiController]
     public class ClientContentsController(ContentServce contentServce, UserHelper userHelper) : ControllerBase
     {
@@ -23,12 +23,12 @@ namespace LMS.Api.Controllers.Client
         }
 
         [HttpGet("{contentId:int}")]
-        [Authorize(Roles =Constants.Client)]
+        [Authorize(Roles=Constants.Client)]
         public async Task<IActionResult> GetLessonContentById(Guid courseId, int lessonId, int contentId)
         {
             var userId = _userHelper.GetUserId();
-            var (stream, fileName, contentType) = await _contentServce.GetContent(userId,courseId, lessonId, contentId);
-            return File(stream, fileName, contentType);
+            var stream = await _contentServce.GetContent(userId,courseId, lessonId, contentId);
+            return Ok(stream);
         }
     }
 }

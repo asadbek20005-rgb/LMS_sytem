@@ -12,9 +12,9 @@ namespace LMS.Data.Repositories.Implementations
 
         public async Task CheckCoursePayment(Guid userId, Guid courseId)
         {
-            var userCourse = await _context.User_Courses.FirstOrDefaultAsync(x => x.UserId == userId && x.CourseId == courseId);
+            var userCourse = await _context.User_Courses.FirstOrDefaultAsync(x => x.CourseId == courseId && x.UserId==userId);
             if (userCourse == null)
-                throw new User_Course_NotFoundException();
+                return;
 
             var isPayed = userCourse.IsPayed == true;
 
