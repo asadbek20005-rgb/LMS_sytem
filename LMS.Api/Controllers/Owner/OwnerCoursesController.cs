@@ -18,61 +18,45 @@ namespace LMS.Api.Controllers.Owner
         [Authorize(Roles = Constants.Owner)]
         public async Task<IActionResult> AddCourse(CreateCourseModel createCourseModel)
         {
-            try
-            {
-                var userId = _userHelper.GetUserId();
-                var dto = await _courseService.AddCourse(userId, createCourseModel);
-                return Ok(dto);
 
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            var userId = _userHelper.GetUserId();
+            var dto = await _courseService.AddCourse(userId, createCourseModel);
+            return Ok(dto);
+
+
         }
 
         [HttpPost("free-course")]
         [Authorize(Roles = Constants.Owner)]
         public async Task<IActionResult> AddFreeCourse(CreateFreeCourseModel createFreeCourseModel)
         {
-            try
-            {
-                var userId = _userHelper.GetUserId();
-                var dto = await _courseService.AddFreeCourse(userId, createFreeCourseModel);
+            var userId = _userHelper.GetUserId();
+            var dto = await _courseService.AddFreeCourse(userId, createFreeCourseModel);
 
-                return Ok(dto);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
+            return Ok(dto);
+
 
         }
 
         [HttpGet]
         [Authorize(Roles = Constants.Owner)]
         public async Task<IActionResult> GetAllOwnerCourse()
-            {
-            try
-            {
-                var userId = _userHelper.GetUserId();
-                var allUserCourses = await _courseService.GetAllUserCourses(userId);
-                return Ok(allUserCourses);
+        {
 
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var userId = _userHelper.GetUserId();
+            var allUserCourses = await _courseService.GetAllUserCourses(userId);
+            return Ok(allUserCourses);
+
+
         }
 
 
         [HttpGet("{courseId:guid}")]
-        [Authorize(Roles =Constants.Owner)]
+        [Authorize(Roles = Constants.Owner)]
         public async Task<IActionResult> GetOwnerCourseById(Guid courseId)
         {
             var userId = _userHelper.GetUserId();
-            var course =  await _courseService.GetUserCourseById(userId,courseId);
+            var course = await _courseService.GetUserCourseById(userId, courseId);
             return Ok(course);
         }
 

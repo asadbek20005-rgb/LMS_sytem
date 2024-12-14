@@ -10,7 +10,7 @@ namespace LMS.Client.RazorPageCodeSource.ClientPages.ClientContent
         [Parameter] public Guid CourseId { get; set; }
         [Parameter] public int LessonId { get; set; }
         [Parameter] public int ContentId { get; set; }
-
+        private string ContentType { get; set; }
         protected string VideUrl;
 
         protected override async Task OnInitializedAsync()
@@ -20,30 +20,16 @@ namespace LMS.Client.RazorPageCodeSource.ClientPages.ClientContent
 
         public async Task<string> SeeVideo()
         {
-            var (statusCode, stream) = await ContentIntegration.GetClientContent(CourseId, LessonId, ContentId);
+            var (stream, fileName, contentType) = await ContentIntegration.GetClientContent(CourseId, LessonId, ContentId);
+            this.ContentType = contentType;
 
-            if (statusCode == System.Net.HttpStatusCode.OK)
-            {
-                return stream;
-            }
+            var ms = new MemoryStream();
+            await stream.CopyToAsync(ms);
+            ms.Position = 0;
 
-            return null; 
+            return $"data:{contentType};base64,{Convert.ToBase64String(ms.ToArray())}";
         }
 
-        public async Task<string> GetVideoUrl(Guid courseId, int lessonId, int contentId)
-        {
-            var client = HttpClientFactory.Create();
-            var url = $"{NavigationManager.BaseUri}/api/clients/clientId/courses/{courseId}/lessons/{lessonId}/ClientContents/{contentId}";
-
-            var response = await client.GetAsync(url);
-
-            if (response.IsSuccessStatusCode)
-            {
-
-                return url;
-            }
-
-            return null;
-        }
+   
     }
 }

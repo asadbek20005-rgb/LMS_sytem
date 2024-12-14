@@ -1,0 +1,8 @@
+﻿@page "/admin-pages/unblock-user/{userId:guid}"
+@inherits RazorPageCodeSource.AdminPages.User.UnBlogUserSourceCode
+
+<h3>Unblock User</h3>
+
+<h1>@UserId</h1>
+
+<button type="submit" @onclick="UnBlogUser">Unblog User</button>

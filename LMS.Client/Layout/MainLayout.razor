@@ -20,6 +20,8 @@
                 {
                     <button class="btn btn-outline-secondary" @onclick="() => SelectRole(Constants.Client)">Client</button>
                     <button class="btn btn-outline-secondary" @onclick="() => SelectRole(Constants.Owner)">Owner</button>
+                    <button class="btn btn-outline-secondary" @onclick="() => SelectRole(Constants.Admin)">Admin</button>
+
                 }
                 else if (Role == Constants.Client)
                 {
@@ -32,6 +34,8 @@
                     <button class="btn btn-outline-secondary" @onclick="RegisterOwner">Register</button>
                     <br />
                     <button type="submit" class="btn btn-outline-primary" @onclick="LogInOwner">Login</button>
+                }else if(Role == Constants.Admin){
+                    <button type="submit" class="btn btn-outline-primary" @onclick="LogInAdmin">Login</button>
                 }
             }
 
@@ -85,7 +89,7 @@
     {
         NavigationManager.NavigateTo("/pages/account/owner/register");
     }
-  
+
 
     private void LogInClient()
     {
@@ -95,5 +99,10 @@
     private void LogInOwner()
     {
         NavigationManager.NavigateTo("/pages/account/owner/login");
+    }
+
+
+    private void LogInAdmin(){
+        NavigationManager.NavigateTo("pages/account/admin/login");
     }
 }

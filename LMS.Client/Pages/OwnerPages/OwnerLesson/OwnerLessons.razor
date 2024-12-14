@@ -1,0 +1,104 @@
+﻿@page "/owner-lessons/{courseId:guid}"
+@inherits RazorPageCodeSource.OwnerPages.OwnerLessons.OwnerLessonsSourceCode
+
+@using LMS.Common.Constants
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = Constants.Owner)]
+
+    @foreach(var lesson in Lessons){
+    <div class="container">
+        <div class="cards">
+            <div class="card">
+                <h2 class="card-title">@lesson.Title</h2>
+                <p class="card-description">
+                    @lesson.Description
+                </p>
+                <button class="see-videos-btn" @onclick="() =>SeeVideos(lesson.Id)">See Videos</button>
+            </div>
+        </div>
+    </div>
+    }
+
+
+<div class="header">
+    <button class="add-lesson-btn" onclick="@NavigateToCreateLesson">Add Lesson</button>
+</div>
+
+
+
+   
+<style>
+
+  
+    .add-lesson-btn {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .add-lesson-btn:hover {
+            background-color: #45a049;
+        }
+
+    .container {
+        max-width: 1200px;
+        margin: 20px auto; 
+        padding: 10px;
+        font-family: Arial, sans-serif;
+    }
+
+    .cards {
+        display: flex;
+        flex-wrap: wrap; 
+        gap: 20px;
+        justify-content: center; 
+    }
+
+    .card {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 300px;
+        padding: 20px;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+
+    .card-title {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .card-description {
+        font-size: 1rem;
+        margin-bottom: 15px;
+        color: #666;
+    }
+
+    .see-videos-btn {
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+
+
+</style>

@@ -1,0 +1,56 @@
+﻿@page "/owner-create-content/{courseId:guid}/{lessonId:int}"
+@inherits RazorPageCodeSource.OwnerPages.OwnerContents.CreateOwnerContentSourceCode
+@using Microsoft.AspNetCore.Components.Forms
+@using LMS.Common.Constants
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = Constants.Owner)]
+<InputFile OnChange="@OnInputFileChange"></InputFile>
+<label>File Name</label>
+<InputText @bind-Value="AddOrUpdateContentModel.FileName"></InputText>
+<video controls style="width: 80%; margin-top: 20px;" hidden></video>
+<button @onclick="CreateOwnerContent">Upload Video</button>
+
+<style>
+    
+   
+
+    input[type="file"],
+    input[type="text"],
+    button {
+        display: block;
+        margin: 10px 0;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 80%;
+        max-width: 600px;
+    }
+
+    button {
+        background-color: #007BFF;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+    label {
+        font-size: 18px;
+        margin-top: 20px;
+        font-weight: bold;
+    }
+
+    video {
+        margin-top: 20px;
+        width: 80%; 
+        max-width: 600px;
+        height: auto; 
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+</style>

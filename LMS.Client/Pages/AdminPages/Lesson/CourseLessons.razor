@@ -1,0 +1,96 @@
+﻿@page "/admin-page/course-lessons/{userId:guid}/{courseId:guid}"
+@inherits RazorPageCodeSource.AdminPages.Lesson.CourseLessonsCodeSource
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Details</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    @foreach(var courseLessons in Lessons)
+    {
+        <div class="content-card">
+            <p class="content-id">@courseLessons.Id</p>
+            <h1 class="content-title">@courseLessons.Title</h1>
+            <p class="content-description">@courseLessons.Description</p>
+            <button class="action-button" @onclick="() => GetCourseLesson(courseLessons.Id)">Lesson</button>
+        </div>
+    }
+</body>
+</html>
+
+
+<style>
+
+
+    /* Karta uchun uslublar */
+    .content-card {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin: 20px auto;
+        max-width: 600px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-align:center;
+    }
+
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+    /* ID uchun uslub */
+    .content-id {
+        font-size: 12px;
+        color: #888;
+        margin-bottom: 10px;
+    }
+
+    /* Sarlavha uchun uslub */
+    .content-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 10px 0;
+        color: #333;
+    }
+
+    /* Tavsif matni uchun uslub */
+    .content-description {
+        font-size: 16px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+        color: #555;
+    }
+
+    /* Tugma uchun uslub */
+    .action-button {
+        align-self: flex-start;
+        background-color: #007bff;
+        color: #fff;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-transform: uppercase;
+        transition: background-color 0.3s ease;
+    }
+
+        .action-button:hover {
+            background-color: #0056b3;
+        }
+
+        .action-button:active {
+            transform: scale(0.98);
+        }
+
+</style>

@@ -49,10 +49,20 @@ namespace LMS.Data.Repositories.Implementations
             return contents;
         }
 
+
+
         public async Task AddOrUpdateContent(Content content)
         {
             await _context.AddAsync(content);
             await _context.SaveChangesAsync();
+        }
+
+
+        // This is for Admin role
+        public async Task<List<Content>> GetContents()
+        {
+            var contents = await _context.Contents.AsNoTracking().ToListAsync();
+            return contents;
         }
     }
 }

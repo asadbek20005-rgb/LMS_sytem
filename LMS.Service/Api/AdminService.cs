@@ -8,13 +8,14 @@ using Microsoft.AspNetCore.Identity;
 
 namespace LMS.Service.Api
 {
-    public class AdminService(JwtTokenService jwtTokenService, ContentServce contentServce, IUserRepository userRepository, ICourseRepository courseRepository)
+    public class AdminService(JwtTokenService jwtTokenService,ILessonRepository lessonRepository,ContentServce contentServce, IUserRepository userRepository, ICourseRepository courseRepository)
     {
         private readonly IUserRepository _userRepository = userRepository;
         private readonly ICourseRepository _courseRepository = courseRepository;
         private readonly ContentServce _contentService = contentServce;
         private readonly JwtTokenService _jwtTokenService = jwtTokenService;
-        public async Task<string> Login(AdminLoginModel adminLoginModel)
+        private readonly ILessonRepository _lessonRepository = lessonRepository;
+        public async Task<string> Login(AdminLoginModel adminLoginModel)    
         {
             try
             {
@@ -37,7 +38,6 @@ namespace LMS.Service.Api
         {
             try
             {
-
                 var users = await _userRepository.GetAllUsers();
                 return users.ParseToDtos();
             }
@@ -51,7 +51,6 @@ namespace LMS.Service.Api
         {
             try
             {
-
                 var courses = await _courseRepository.GetAllCourses();
                 return courses.ParseToDtos();
             }
@@ -78,7 +77,6 @@ namespace LMS.Service.Api
         {
             try
             {
-
                 await _userRepository.UnBlockUser(userId);
             }
             catch (Exception ex)
@@ -101,6 +99,44 @@ namespace LMS.Service.Api
                 throw new Exception(ex.Message);
             }
         }
+
+        public async Task<List<CourseDto>> GetUserCourses(Guid userId)
+        {
+            var userCoursese = await _courseRepository.GetAllUserCourses(userId);
+            return userCoursese.ParseToDtos();  
+        }
+
+        public async Task<CourseDto> GetUserCourse(Guid userId, Guid courseId)
+        {
+            var userCourse = await _courseRepository.GetUserCourseById(userId, courseId);   
+            return userCourse.ParseToDto(); 
+        }
+
+        public async Task<List<LessonDto>> GetCourseLessons(Guid userId,Guid courseId)
+        {
+            var courseLessons = await _lessonRepository.GetAllUserCourseLessons(userId, courseId);
+            return courseLessons.ParseToDtos();
+        }
+
+        public async Task<LessonDto> GetCourseLesson(Guid userId, Guid courseId, int lessonId)
+        {
+            var courseLesson = await _lessonRepository.GetUserCourseLessonById(userId, courseId, lessonId);
+            return courseLesson.ParseToDto();
+        }
+
+        public async Task<List<ContentDto>> GetLessonContents(Guid userId, Guid courseId, int lessonId)
+        {
+            var lessonContents = await _contentService.GetAllContents(userId, courseId, lessonId);
+            return lessonContents;
+        }
+
+
+        public async Task<Stream> GetLessonContent(Guid userId, Guid courseId, int lessonId, int contentId)
+        {
+            var lessonContent = await _contentService.GetContent(userId,courseId, lessonId, contentId);
+            return lessonContent;
+        }
+
 
 
         private static void VerfyPassword(User user, string password)

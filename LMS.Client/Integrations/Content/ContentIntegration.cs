@@ -11,23 +11,21 @@ namespace LMS.Client.Integrations.Content
     {
         private readonly HttpClient _httpClient = httpClient;
         private readonly TokenHelper _tokenHelper = tokenHelper;
-        public async Task<(HttpStatusCode, string)> GetClientContent(Guid courseId, int lessonId, int contentId)
+        public async Task<(Stream, string, string)> GetClientContent(Guid courseId, int lessonId, int contentId)
         {
             await _tokenHelper.AddTokenToHeader();
-            var token = await _tokenHelper.GetToken();
-            string url = $"/api/clients/clientId/courses/{courseId}/lessons/{lessonId}/ClientContents/{contentId}?token={token}";
-
+            string url = $"/api/clients/clientId/courses/{courseId}/lessons/{lessonId}/ClientContents/{contentId}";
             var response = await _httpClient.GetAsync(url);
-
             if (response.IsSuccessStatusCode)
             {
-                var stream = await response.Content.ReadAsStreamAsync();
-                return (response.StatusCode, stream.ToString());  
+                var contentStream = await response.Content.ReadAsStreamAsync();
+                var contentDisposition = response.Content.Headers.ContentDisposition;
+                var contentType = response.Content.Headers.ContentType?.MediaType ?? "application/octet-stream";
+                var fileName = contentDisposition?.FileName ?? "unknown";
+
+                return (contentStream, fileName, contentType);
             }
-            else
-            {
-                return (response.StatusCode, null);
-            }
+            throw new NotImplementedException();
         }
 
 
@@ -75,17 +73,10 @@ namespace LMS.Client.Integrations.Content
         {
             await _tokenHelper.AddTokenToHeader();
             var content = new MultipartFormDataContent();
-            if (addOrUpdateContent.FormFile != null && addOrUpdateContent.FormFile.Length > 0)
-            {
-                var fileContent = new StreamContent(addOrUpdateContent.FormFile.OpenReadStream());
-                fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
-                content.Add(fileContent, "FormFile", addOrUpdateContent.FormFile.FileName);
-            }
-            else
-            {
-                return HttpStatusCode.BadRequest;
-            }
-
+            content.Add(new StringContent(addOrUpdateContent.FileName), "FileName");
+            var fileContent = new StreamContent(file.OpenReadStream(maxAllowedSize: 300 * 1024 * 1024));
+            fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
+            content.Add(fileContent, "FormFile", file.Name);
             string url = $"/api/owners/ownerId/courses/{courseId}/lessons/{lessonId}/OwnerContents";
             var response = await _httpClient.PostAsync(url, content);
             return response.StatusCode;

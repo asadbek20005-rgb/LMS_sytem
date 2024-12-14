@@ -4,30 +4,28 @@ using LMS.Data.Entities;
 using LMS.Data.Repositories.Interfaces;
 using LMS.Service.Extensions;
 using LMS.Service.Helpers;
-using LMS.Service.MinioStorage;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Metadata;
 
 namespace LMS.Service.Api
 {
-    public class ContentServce(IContentRepository contentRepository)
+    public class ContentServce(IContentRepository contentRepository, ILessonRepository lessonRepository)
     {
         private readonly IContentRepository _contentRepository = contentRepository;
+        private readonly ILessonRepository _lessonRepository = lessonRepository;
         public async Task<ContentDto> AddOrUpdateContent(Guid userId, Guid courseId, int lessonId, AddOrUpdateContentModel formFile)
         {
             try
             {
-
+                await CheckingForIds(userId, courseId, lessonId);
                 var videoFile = formFile.FormFile;
                 ContentHelper.IsVideo(videoFile);
                 var data = await ContentHelper.GetBytes(videoFile);
                 var folderPath = Path.Combine("wwwroot", "Videos");
-                var filePath = Path.Combine(folderPath, formFile.FIleName);
+                var filePath = Path.Combine(folderPath, formFile.FileName);
                 if (data is not null)
                     await System.IO.File.WriteAllBytesAsync(filePath, data);
                 var newContent = new Content
                 {
-                    Name = formFile.FIleName,
+                    Name = formFile.FileName,
                     LessonId = lessonId,
                 };
                 await _contentRepository.AddOrUpdateContent(newContent);
@@ -41,12 +39,12 @@ namespace LMS.Service.Api
         }
 
 
-        public async Task<bool> DeleteFile(Guid userId, Guid courseId,int lessonId,int contentId)
+        public async Task<bool> DeleteFile(Guid userId, Guid courseId, int lessonId, int contentId)
         {
             try
             {
-                var content = await _contentRepository.GetContentById(userId, courseId,lessonId,contentId);
-               
+                var content = await _contentRepository.GetContentById(userId, courseId, lessonId, contentId);
+
                 string rootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "videos");
                 string filePath = Path.Combine(rootPath, content.Name);
 
@@ -81,6 +79,14 @@ namespace LMS.Service.Api
             }
         }
 
+        // Admin
+
+        public async Task<List<ContentDto>> GetContents()
+        {
+            var contents = await _contentRepository.GetContents();
+            return contents.ParseToDtos();
+        }
+
         public async Task<Stream> GetContent(Guid userId, Guid courseId, int lessonId, int contentId)
         {
             try
@@ -109,7 +115,7 @@ namespace LMS.Service.Api
                 }
                 else
                 {
-                    throw new Exception("Fayl topilmadi.");
+                    return Stream.Null;
                 }
             }
             catch (Exception ex)
@@ -119,6 +125,14 @@ namespace LMS.Service.Api
         }
 
 
+        private async Task CheckingForIds(Guid userId, Guid courseId, int lessonId)
+        {
+            var checking = await _lessonRepository.GetUserCourseLessonById(userId, courseId, lessonId);
+            if (checking == null)
+            {
+                throw new Exception("There is no given stuff");
+            }
+        }
 
 
     }

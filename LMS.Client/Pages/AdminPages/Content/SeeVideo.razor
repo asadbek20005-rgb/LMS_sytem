@@ -1,0 +1,43 @@
+﻿@page "/admin-page/see-video/{userId:guid}/{courseId:guid}/{lessonId:int}/{contentId:int}"
+@inherits RazorPageCodeSource.AdminPages.Content.SeeVideoSourceCode
+@using LMS.Common.Constants
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = Constants.Admin)]
+    
+@if (!string.IsNullOrEmpty(VideUrl))
+{
+    <video controls class="responsive-video">
+        <source src="@VideUrl" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <button class="responsive-video" onclick="DeleteVideo">Delete</button>
+}
+else
+{
+    <p>Content is not created</p>
+}
+
+
+<style>
+    .video-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin: 20px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .responsive-video {
+        width: 100%;
+        max-width: 800px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+</style>

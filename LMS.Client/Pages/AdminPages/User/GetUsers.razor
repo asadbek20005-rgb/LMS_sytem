@@ -1,0 +1,134 @@
+﻿@page "/admin-pages/users"
+@using LMS.Client.RazorPageCodeSource.AdminPages.User
+@using LMS.Common.Constants
+@using Microsoft.AspNetCore.Authorization
+@inherits GetUsersSourceCode
+@attribute [Authorize(Roles = Constants.Admin)]
+<div class="user-list">
+    <h2>User List</h2>
+    <table class="user-table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Username</th>
+                <th>Phone Number</th>
+                <th>Role</th>
+                <th>Is Blocked</th>
+                <th>Created Date</th>
+                <th>Action Blog User</th>
+                <th>Action Unblog User</th>
+                <th>Action Courses</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in UsersDtos)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                    <td>@user.Username</td>
+                    <td>@user.PhoneNumber</td>
+                    <td>@user.Role</td>
+                    <td>@(user.IsBlocked ? "Yes" : "No")</td>
+                    <td>@user.CreatedDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>
+                    <button type="submit" @onclick="()=>BlogUser(user.Id)">Blog</button>
+
+                    </td>
+
+                    <td>
+                    <button type="submit" @onclick="()=>UnblogUser(user.Id)">Unblog</button>
+
+                    </td>
+
+                    <td>
+                        <button type="submit" @onclick="() => GetUserCourses(user.Id)">Courses</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<style>
+    /* Umumiy bo'lim */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* User List bo'limi */
+    .user-list {
+        width: 80%;
+        margin: 20px auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+        .user-list h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+    /* Jadvalni sozlash */
+    .user-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+        .user-table thead {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .user-table th, .user-table td {
+            padding: 10px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .user-table th {
+            font-weight: bold;
+        }
+
+        .user-table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+    /* Tugmalarni sozlash */
+    button {
+        background-color: #4CAF50; /* Yashil */
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s ease;
+        margin: 5px;
+    }
+
+        button:hover {
+            background-color: #45a049; /* Qorong'iroq yashil */
+        }
+
+        button[type="submit"]:nth-child(2) {
+            background-color: #ff5722; /* To'q qizil */
+        }
+
+            button[type="submit"]:nth-child(2):hover {
+                background-color: #e64a19; /* To'qroq qizil */
+            }
+
+</style>
+
+

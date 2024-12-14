@@ -8,5 +8,7 @@ namespace LMS.Data.Repositories.Interfaces
         Task AddOrUpdateContent(Content content);
         Task<Content> GetContentById(Guid userId, Guid courseId, int lessonId, int contentId);
         Task<List<Content>> GetAllContents(Guid userId, Guid courseId, int lessonId);
+        // For Admin
+        Task<List<Content>> GetContents();
     }
 }

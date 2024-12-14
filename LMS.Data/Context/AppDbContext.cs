@@ -29,7 +29,7 @@ namespace LMS.Data.Context
                 Username = "spawn",
                 Role = Constants.Admin
             };
-            string password = "spawn";
+            string password = "asadbek_945631282";
             var hashedPass = new PasswordHasher<User>().HashPassword(user, password);
             user.PasswordHash = hashedPass;
             users.Add(user);

@@ -17,31 +17,11 @@ namespace LMS.Client.RazorPageCodeSource.OwnerPages.OwnerContents
         [Parameter] public int LessonId { get; set; }
         private IBrowserFile BrowserFile;
         private const long MaxFileSize = 300 * 1024 * 1024;
-        protected AddOrUpdateContentModel AddOrUpdateContentModel { get; set; } = new AddOrUpdateContentModel();
+        protected AddOrUpdateContentModel AddOrUpdateContentModel = new AddOrUpdateContentModel();
 
         protected async Task OnInputFileChange(InputFileChangeEventArgs args)
         {
             BrowserFile = args.File;
-
-            using (var memoryStream = new MemoryStream())
-            {
-                await BrowserFile.OpenReadStream(MaxFileSize).CopyToAsync(memoryStream);
-                memoryStream.Position = 0;
-
-                var bytes = memoryStream.ToArray();
-
-                AddOrUpdateContentModel.FormFile = new FormFile(
-                    new MemoryStream(bytes),  
-                    baseStreamOffset: 0,
-                    length: bytes.Length,
-                    name: BrowserFile.Name,
-                    fileName: BrowserFile.Name
-                )
-                {
-                    Headers = new HeaderDictionary(),
-                    ContentType = BrowserFile.ContentType
-                };
-            }
 
         }
 

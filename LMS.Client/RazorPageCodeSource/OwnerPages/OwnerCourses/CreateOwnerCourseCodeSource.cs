@@ -15,7 +15,10 @@ namespace LMS.Client.RazorPageCodeSource.OwnerPages.OwnerCourses
         {
             var statusCode = await CourseIntegration.CreateOwnerCourse(Model);
             if (statusCode == System.Net.HttpStatusCode.OK)
-                NavigationManager.NavigateTo("/pages/course");
+            {
+                NavigationManager.NavigateTo("/pages/course", forceLoad: true);
+
+            }
         }
     }
 }

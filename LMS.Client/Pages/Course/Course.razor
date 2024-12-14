@@ -1,6 +1,10 @@
 ﻿@page "/pages/course"
 @inherits RazorPageCodeSource.Course.CourseCodeSource
 
+@if(Courses is null || Courses.Count == 0){
+    <h1>Courses have not created yet!</h1>
+}
+else{
 <div class="courses-container">
     @foreach (var course in Courses)
     {
@@ -17,6 +21,7 @@
         </div>
     }
 </div>
+}
 
 <style>
     /* General container styling */

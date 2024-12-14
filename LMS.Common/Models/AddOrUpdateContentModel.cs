@@ -7,6 +7,6 @@ namespace LMS.Common.Models
     {
         [Required]
         public  IFormFile FormFile {  get; set; }
-        public string FIleName { get; set; }
+        public string FileName { get; set; }
     }
 }
