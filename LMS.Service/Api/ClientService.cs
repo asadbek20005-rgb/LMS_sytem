@@ -20,7 +20,6 @@ public class ClientService(MemoryCacheService memoryCacheService, IUserRepositor
     private readonly MemoryCacheService _memoryCacheService = memoryCacheService;
     public async Task<int> Register(ClientRegisterModel userRegisterModel)
     {
-
         try
         {
             await _userRepository.CheckUserPhone(userPhoneNumber: userRegisterModel.PhoneNumber);

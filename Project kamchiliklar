@@ -1,63 +1,13 @@
 Project kamchiliklar
 
-Api check:
 
-Admin:
-1. Admin Login 
-2. Admin Users 
-3. Admin Courses
-4. Admin Block
-5. Admin Content Delete
-
-Client:
-1. Register
-2. Login
-3. Verfy-register
-4. Verify-login
-5. Get Courses
-6. Get Course by id
-7. Get Lessons
-8. Get Lesson by Id
-9. Get Contents
-10. Get Content by Id
-11. Pay payment
-12. Enter Card
-
-Owner:
-1. Register
-2. Login
-3. Verfy-register
-4. Verify-login
-5. Create Course
-6. Create Lesson
-7. Create Content
-8. Get Courses
-9. Get Course by Id
-10. Get Lessons
-11. Get Lesson by Id
-12. Get Contents
-13. Get Content by Id
-14. Create Free Course
-15. Set Price
 
 UI:
-
-12-Create Owner Content
-13-Get all owner contents
-14-get owner content
 15-Admin register, login logout
 16-Backendda bo'lga errorlarni Userga ham ko'rsatish
 17-Course description agar uzun bolib ketsa togirlash
 18-Owner da Course bolimida button open course nom bolish kerak
 19-Owner da verify login Username place holder togirlash
 20-Lesson yaratgandan kegin lessons bolimiga navigate to
-21-Create content yaxshilash html css	
 22-Content yaratgandan kegin contents ga navigate to
 23-Cardda Statusni togirlash
-
-
-
-
-
-Tasks:
-1.
